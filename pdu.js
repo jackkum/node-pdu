@@ -75,57 +75,6 @@ PDU.Deliver = function()
 };
 
 /**
- * Legasy support
- * @returns {array}
- */
-PDU.generate = function(params)
-{
-    
-    if( ! params.receiver){
-        throw new Error("Receiver not set");
-    }
-    
-    var DCS = PDU.getModule('PDU/DCS');
-    
-    var Submit = PDU.Submit(),
-        dcs    = Submit.getDcs();
-    
-    switch(params.encoding){
-        case '16bit': dcs.setTextAlphabet(DCS.ALPHABET_UCS2);    break;
-        case '8bit':  dcs.setTextAlphabet(DCS.ALPHABET_8BIT);    break;
-        case '7bit':  dcs.setTextAlphabet(DCS.ALPHABET_DEFAULT); break;
-    }
-    
-    Submit.setAddress('' + params.receiver);
-    Submit.setData(params.text || '');
-    Submit.getType().setSrr(1);
-    
-    var parts = Submit.getParts();
-
-    return parts.map(function(part){
-        return part.toString();
-    });
-    
-};
-
-/**
- * Legacy support
- * @param {string} str
- * @returns {PDU}
- */
-PDU.parseStatusReport = function(str)
-{
-    var pdu = PDU.parse(str);
-    
-    pdu.smsc      = pdu.getSca().getPhone();
-    pdu.reference = pdu.getReference();
-    pdu.sender    = pdu.getSca().getPhone();
-    pdu.status    = pdu.getStatus();
-    
-    return pdu;
-};
-
-/**
  * parsed string
  * @var string
  */
@@ -153,7 +102,6 @@ PDU.parse = function(str)
 {
     var SCA     = PDU.getModule('PDU/SCA'),
         DCS     = PDU.getModule('PDU/DCS'),
-        Deliver = require('./Deliver'),
         Helper  = PDU.getModule('PDU/Helper');
     
     // current pdu string
@@ -171,29 +119,7 @@ PDU.parse = function(str)
     // parse sms address
     self._address = SCA.parse();
     
-    self = Helper.initVars(self);
-    
-    // Legacy support
-    self.smsc        = self.getSca().getPhone();
-    self.smsc_type   = self.getSca().getType().toString();
-    self.sender      = self.getAddress().getPhone();
-    self.sender_type = self.getAddress().getType().toString();
-    self.text        = self.getData().getData();
-    
-    if(self instanceof Deliver){
-        self.time = self.getScts().getTime() * 1000;
-    }
-    
-    self.encoding = (function(){
-        switch(self.getDcs().getTextAlphabet()){
-            case DCS.ALPHABET_8BIT:    return '8bit';
-            case DCS.ALPHABET_DEFAULT: return '7bit';
-            case DCS.ALPHABET_UCS2:    return '7bit';
-            default:                   return undefined;
-        }
-    })();
-    
-    return self;
+    return Helper.initVars(self);
 };
 
 /**
