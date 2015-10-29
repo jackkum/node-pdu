@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Create a pdu string for send sms",
   "main": "index.js",
+  "dependencies": {
+	  "sprintf": "~0.1.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
