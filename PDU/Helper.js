@@ -79,7 +79,7 @@ Helper.decode8Bit = function(text)
 {
     return text.match(/.{1,2}/g).map(function(hex){
         var buffer = new Buffer(hex, 'hex');
-        return Helper.char(buffer[1]);
+        return Helper.char(buffer[0]);
     }).join("");
 };
 

@@ -275,6 +275,9 @@ Data.prototype._splitMessage = function(max, header)
     return data;
 };
 
+Data.prototype.getText = function(){
+    return this.getData();
+};
 
 /**
  * getter text message

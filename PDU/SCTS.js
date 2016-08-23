@@ -19,18 +19,28 @@ function SCTS(date)
 SCTS.parse = function()
 {
     var hex    = PDU.getPduSubstr(14),
-        params = ["20%02d-%02d-%02d %02d:%02d:%02d"];
+        params = [];
 
         hex.match(/.{1,2}/g).map(function(s){
+            if(/\D+/.test(s)){
+                return params.push(0);
+            }
+
             params.push(
                 parseInt(
                     s.split("").reverse().join("")
                 )
             );
         });
+
+    var year   = 2000 + params.shift();
+    var month  = params.shift();
+    var day    = params.shift();
+    var hour   = params.shift();
+    var minute = params.shift();
+    var second = params.shift();
     
-    var time = Date.parse(sprintf.apply(sprintf, params)),
-        date = new Date(time);
+    var date = new Date(year, month-1, day, hour, minute, second);
     
     return new SCTS(date);
 };
