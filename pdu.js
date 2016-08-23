@@ -1,6 +1,7 @@
 'use strict';
 
 var util    = require('util'),
+    path    = require('path'),
     sprintf = require('sprintf');
 
 function PDU()
@@ -56,7 +57,7 @@ function PDU()
 
 PDU.getModule = function(name)
 {
-    return require('./' + name);
+    return require(path.join(__dirname, name));
 };
 
 PDU.Submit  = function()
