@@ -62,17 +62,17 @@ PDU.getModule = function(name)
 
 PDU.Submit  = function()
 {
-    return new (require('./Submit'))();
+    return new (this.getModule('Submit'))();
 };
 
 PDU.Report  = function()
 {
-    return new (require('./Report'))();
+    return new (this.getModule('Report'))();
 };
 
 PDU.Deliver = function()
 {
-    return new (require('./Deliver'))();
+    return new (this.getModule('Deliver'))();
 };
 
 /**
