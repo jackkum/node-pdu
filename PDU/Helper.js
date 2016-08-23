@@ -88,7 +88,7 @@ Helper.decode8Bit = function(text)
  * @param string $text
  * @return string
  */
-Helper.decode7bit = function(text)
+Helper.decode7Bit = function(text)
 {
     var ret = [],
         data = new Buffer(text, "hex"),
@@ -145,7 +145,7 @@ Helper.encode8Bit = function(text)
  * @param string $text
  * @return array
  */
-Helper.encode7bit = function(text)
+Helper.encode7Bit = function(text)
 {
     var ret   = [],
         data  = new Buffer(text),

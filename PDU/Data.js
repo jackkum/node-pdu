@@ -209,8 +209,8 @@ Data.prototype._prepareParts = function()
         switch(self.getPdu().getDcs().getTextAlphabet()){
             
             case DCS.ALPHABET_DEFAULT:
-                PDU.debug("Helper.encode7bit(text)");
-                tmp = Helper.encode7bit(text);
+                PDU.debug("Helper.encode7Bit(text)");
+                tmp = Helper.encode7Bit(text);
                 break;
             
             case DCS.ALPHABET_8BIT:
