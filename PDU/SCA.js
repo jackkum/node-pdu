@@ -95,7 +95,7 @@ SCA.parse = function(isAddress)
 
             case Type.TYPE_ALPHANUMERICAL:
 
-                sca.setPhone(Helper.decode7bit(hex));
+                sca.setPhone(Helper.decode7Bit(hex));
 
                 break;
 
