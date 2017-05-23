@@ -105,7 +105,8 @@ DCS.ALPHABET_RESERVED          = 0x03;
 DCS.parse = function()
 {
     var dcs    = new DCS(),
-        buffer = new Buffer(PDU.getPduSubstr(2), 'hex'),
+        hex    = PDU.getPduSubstr(2),
+        buffer = new Buffer(hex, 'hex'),
         byte   = buffer[0];
     
     dcs._encodeGroup  = 0x0F&(byte>>4);
@@ -115,7 +116,10 @@ DCS.parse = function()
     dcs._classMessage = (3 & dcs._dataEncoding);
     
     switch(dcs._encodeGroup){
-        case 0x0C: dcs._discardMessage            = true; break;
+        case 0x0C: 
+            dcs._discardMessage = true; 
+            dcs._alphabet       = DCS.ALPHABET_DEFAULT;
+            break;
         case 0x0D: dcs._storeMessage              = true; break;
         case 0x0E: dcs._storeMessageUCS2          = true; break;
         case 0x0F: 
