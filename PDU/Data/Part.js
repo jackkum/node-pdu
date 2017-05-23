@@ -69,17 +69,17 @@ Part.parse = function(data)
     
     switch(alphabet){
         case DCS.ALPHABET_DEFAULT:
-            PDU.debug("Helper.decode7Bit()");
+            PDU.debug("Helper.decode7Bit(" + hex + ")");
             text = Helper.decode7Bit(hex);
             break;
         
         case DCS.ALPHABET_8BIT:
-            PDU.debug("Helper.decode8Bit()");
+            PDU.debug("Helper.decode8Bit(" + hex + ")");
             text = Helper.decode8Bit(hex);
             break;
         
         case DCS.ALPHABET_UCS2:
-            PDU.debug("Helper.decode16Bit()");
+            PDU.debug("Helper.decode16Bit(" + hex + ")");
             text = Helper.decode16Bit(hex);
             break;
         
