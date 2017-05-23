@@ -130,7 +130,7 @@ SCA.prototype.setPhone = function(phone, SC)
     this._isAddress = !SC;
     
     if(this.getType().getType() === Type.TYPE_ALPHANUMERICAL){
-        var tmp = Helper.encode7bit(clear);
+        var tmp = Helper.encode7Bit(clear);
         this._size    = tmp.shift();
         this._encoded = tmp.shift();
     } else {
