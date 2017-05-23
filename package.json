@@ -1,6 +1,6 @@
 {
   "name": "node-pdu",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Create a pdu string for send sms",
   "main": "index.js",
   "dependencies": {
