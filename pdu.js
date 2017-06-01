@@ -55,6 +55,11 @@ function PDU()
     
 };
 
+PDU.getHelper = function()
+{
+    return PDU.getModule('PDU/Helper');
+}
+
 PDU.getModule = function(name)
 {
     return require(path.join(__dirname, name));

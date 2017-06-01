@@ -21,6 +21,10 @@ SCTS.parse = function()
     var hex    = PDU.getPduSubstr(14),
         params = [];
 
+    if( ! hex){
+        throw new Error("Not enough bytes");
+    }
+
         hex.match(/.{1,2}/g).map(function(s){
             if(/\D+/.test(s)){
                 return params.push(0);
