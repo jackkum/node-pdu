@@ -11,6 +11,7 @@ function Helper()
 Helper._limitNormal   = 140;
 Helper._limitCompress = 160;
 Helper._limitUnicode  = 70;
+Helper.ALPHABET_7BIT  = "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞ\x1bÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ`¿abcdefghijklmnopqrstuvwxyzäöñüà";
 
 Helper.ucfirst = function(str)
 {
@@ -90,16 +91,16 @@ Helper.decode8Bit = function(text)
  */
 Helper.decode7Bit = function(text)
 {
-    var ret = [],
-        data = new Buffer(text, "hex"),
-        mask = 0xFF,
+    var ret   = [],
+        data  = new Buffer(text, "hex"),
+        mask  = 0xFF,
         shift = 0,
         carry = 0;
     
     for(var i = 0; i < data.length; i++){
         var char = data[i];
         if(shift === 7){
-            ret.push(carry);
+            ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
             carry = 0;
             shift = 0;
         }
@@ -109,13 +110,14 @@ Helper.decode7Bit = function(text)
 
         var digit = (carry) | ((char & a) << (shift)) & 0xFF;
         carry = (char & b) >> (7-shift);
-        ret.push(digit);
+
+        ret.push(Helper.ALPHABET_7BIT.charCodeAt(digit));
 
         shift++;
     }
     
     if (carry){
-        ret.push(carry);
+        ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
     }
     
     return (new Buffer(ret, "binary")).toString();
@@ -140,6 +142,16 @@ Helper.encode8Bit = function(text)
     return [length, pdu];
 };
 
+Helper._get7BitChar = function(char){
+    var index = Helper.ALPHABET_7BIT.indexOf(String.fromCharCode(char));
+    
+    if(index != -1){
+      return index;
+    }
+
+    return char;
+}
+
 /**
  * encode message
  * @param string $text
@@ -155,8 +167,8 @@ Helper.encode7Bit = function(text)
     
     for (var i = 0; i < len; i++) {
         
-        var char     = data[i] & 0x7F,
-            nextChar = (i+1 < len) ? (data[i+1] & 0x7F) : 0;
+        var char     = Helper._get7BitChar(data[i] & 0x7F),
+            nextChar = Helper._get7BitChar((i+1 < len) ? (data[i+1] & 0x7F) : 0);
         
         if (shift === 7) { shift = 0; continue; }
         
