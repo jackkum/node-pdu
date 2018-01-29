@@ -12,6 +12,7 @@ Helper._limitNormal   = 140;
 Helper._limitCompress = 160;
 Helper._limitUnicode  = 70;
 Helper.ALPHABET_7BIT  = "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞ\x1bÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ`¿abcdefghijklmnopqrstuvwxyzäöñüà";
+Helper.EXTENDED_TABLE = "````````````````````^```````````````````{}`````\\````````````[~]`|````````````````````````````````````€``````````````````````````";
 
 Helper.ucfirst = function(str)
 {
@@ -95,12 +96,22 @@ Helper.decode7Bit = function(text)
         data  = new Buffer(text, "hex"),
         mask  = 0xFF,
         shift = 0,
-        carry = 0;
+        carry = 0,
+        inExt = false;
     
     for(var i = 0; i < data.length; i++){
         var char = data[i];
         if(shift === 7){
-            ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
+            if(carry % 128 == 27){
+                inExt = true;
+            } else {
+                if(inExt){
+                    ret.push(Helper.EXTENDED_TABLE.charCodeAt(carry));
+                    inExt = false;
+                } else {
+                    ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
+                }
+            }
             carry = 0;
             shift = 0;
         }
@@ -111,7 +122,16 @@ Helper.decode7Bit = function(text)
         var digit = (carry) | ((char & a) << (shift)) & 0xFF;
         carry = (char & b) >> (7-shift);
 
-        ret.push(Helper.ALPHABET_7BIT.charCodeAt(digit));
+        if(digit % 128 == 27){
+            inExt = true;
+        } else {
+            if(inExt){
+                ret.push(Helper.EXTENDED_TABLE.charCodeAt(digit));
+                inExt = false;
+            } else {
+                ret.push(Helper.ALPHABET_7BIT.charCodeAt(digit));
+            }
+        }
 
         shift++;
     }
@@ -143,14 +163,47 @@ Helper.encode8Bit = function(text)
 };
 
 Helper._get7BitChar = function(char){
-    var index = Helper.ALPHABET_7BIT.indexOf(String.fromCharCode(char));
+    var index;
+
+    index = Helper.ALPHABET_7BIT.indexOf(String.fromCharCode(char));
     
+    if(index != -1){
+      return index;
+    }
+
+    index = Helper.EXTENDED_TABLE.indexOf(String.fromCharCode(char));
+
     if(index != -1){
       return index;
     }
 
     return char;
 }
+
+Helper._convert7BitChar = function(text){
+    var data = new Buffer(text)
+    var len  = data.length;
+    var res  = "";
+
+    for (var i = 0; i < len; i++) {
+        var index, char = data[i] & 0x7F;
+
+        index = Helper.ALPHABET_7BIT.indexOf(String.fromCharCode(char));
+        
+        if(index != -1){
+            res += Helper.char(index);
+            continue;
+        }
+
+        index = Helper.EXTENDED_TABLE.indexOf(String.fromCharCode(char));
+
+        if(index != -1){
+            res += Helper.char(27) + Helper.char(index);
+        }
+    }
+
+    return new Buffer(res);
+};
 
 /**
  * encode message
@@ -160,15 +213,15 @@ Helper._get7BitChar = function(char){
 Helper.encode7Bit = function(text)
 {
     var ret   = [],
-        data  = new Buffer(text),
+        data  = Helper._convert7BitChar(text),
         mask  = 0xFF,
         shift = 0,
         len   = data.length;
     
     for (var i = 0; i < len; i++) {
         
-        var char     = Helper._get7BitChar(data[i] & 0x7F),
-            nextChar = Helper._get7BitChar((i+1 < len) ? (data[i+1] & 0x7F) : 0);
+        var char     = data[i],
+            nextChar = (i+1 < len) ? data[i+1] : 0;
         
         if (shift === 7) { shift = 0; continue; }
         
