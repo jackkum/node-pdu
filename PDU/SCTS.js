@@ -35,13 +35,16 @@ SCTS.parse = function()
     }
 
     hex.match(/.{1,2}/g).map(function(s){
-        if(/\D+/.test(s)){
+        /* NB: 7'th element (index = 6) is TimeZone and it can be a HEX */
+        if((params.length < 6 && /\D+/.test(s)) ||
+           (params.length == 6 && /[^0-9A-Fa-f]/.test(s))){
             return params.push(0);
         }
 
         params.push(
             parseInt(
-                s.split("").reverse().join("")
+                s.split("").reverse().join(""),
+                params.length < 6 ? 10 : 16
             )
         );
     });
