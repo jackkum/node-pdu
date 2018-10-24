@@ -46,14 +46,12 @@ SCTS.parse = function()
         );
     });
 
-    var year   = 2000 + params.shift();
-    var month  = params.shift();
-    var day    = params.shift();
-    var hour   = params.shift();
-    var minute = params.shift();
-    var second = params.shift();
+    /* Build ISO8601 datetime string in the YYYY-MM-DDTHH:mm:ss format */
+    var isoStr = sprintf('%d-%02d-%02dT%02d:%02d:%02d',
+                         params[0] > 70 ? 1900 + params[0] : 2000 + params[0],
+                         params[1], params[2], params[3], params[4], params[5]);
     
-    var date = new Date(year, month-1, day, hour, minute, second);
+    var date = new Date(isoStr);
     
     return new SCTS(date);
 };
