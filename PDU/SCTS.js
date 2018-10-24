@@ -86,9 +86,7 @@ SCTS.prototype.toString = function()
     return this._getDateTime()
         .match(/.{1,2}/g)
         .map(function(s){
-            return parseInt(
-                s.split("").reverse().join("")
-            );
+            return s.split("").reverse().join("")
         }).join("");
 };
 
