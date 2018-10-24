@@ -53,10 +53,20 @@ SCTS.parse = function()
     var isoStr = sprintf('%d-%02d-%02dT%02d:%02d:%02d',
                          params[0] > 70 ? 1900 + params[0] : 2000 + params[0],
                          params[1], params[2], params[3], params[4], params[5]);
+
+    /* Parse TimeZone field (see 3GPP TS 23.040 section 9.2.3.11) */
+    var tzOff = params[6] & 0x7f;
+    tzOff = (tzOff >> 4) * 10 + (tzOff & 0x0f); /* Semi-octet to int */
+    tzOff = tzOff * 15;                         /* Quarters of an hour to minutes */
+    if (params[6] & 0x80)                       /* Check sign */
+        tzOff *= -1;
+
+    isoStr += sprintf('%s%02d:%02d', tzOff < 0 ? '-' : '+',
+                      Math.floor(Math.abs(tzOff / 60)), tzOff % 60);
     
     var date = new Date(isoStr);
     
-    return new SCTS(date);
+    return new SCTS(date, tzOff);
 };
 
 /**
