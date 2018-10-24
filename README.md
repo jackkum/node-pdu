@@ -128,6 +128,7 @@ pdu.parse('06918919015000240C9189194238148900003110211052254117CAB03D3C1FCBD3703
 * methods:
  * constructor(Date date) // 
  * [Integer] getTime()
+ * [Integer] getTzOff() // get time zone offset, in minutes
 
 ### SCA 
 ### SCA/Type

@@ -3,13 +3,22 @@
 var PDU     = require('../pdu'),
     sprintf = require('sprintf');
     
-function SCTS(date)
+function SCTS(date, tzOff)
 {
     /**
      * unix time
      * @var integer
      */
     this._time = date.getTime() / 1000;
+
+    /**
+     * time zone offset, in minutes
+     * @var integer
+     */
+    if (tzOff === undefined)
+        this._tzOff = -1 * date.getTimezoneOffset();
+    else
+        this._tzOff = tzOff;
 }
 
 /**
@@ -56,6 +65,15 @@ SCTS.parse = function()
 SCTS.prototype.getTime = function()
 {
     return this._time;
+};
+
+/**
+ * getter tzOff
+ * @return integer
+ */
+SCTS.prototype.getTzOff = function()
+{
+    return this._tzOff;
 };
 
 /**
