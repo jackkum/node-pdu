@@ -34,17 +34,17 @@ SCTS.parse = function()
         throw new Error("Not enough bytes");
     }
 
-        hex.match(/.{1,2}/g).map(function(s){
-            if(/\D+/.test(s)){
-                return params.push(0);
-            }
+    hex.match(/.{1,2}/g).map(function(s){
+        if(/\D+/.test(s)){
+            return params.push(0);
+        }
 
-            params.push(
-                parseInt(
-                    s.split("").reverse().join("")
-                )
-            );
-        });
+        params.push(
+            parseInt(
+                s.split("").reverse().join("")
+            )
+        );
+    });
 
     var year   = 2000 + params.shift();
     var month  = params.shift();
