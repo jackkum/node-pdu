@@ -88,6 +88,25 @@ SCTS.prototype.getTzOff = function()
 };
 
 /**
+ * returns ISO8601 formated datetime string
+ * @return string
+ */
+SCTS.prototype.getIsoString = function()
+{
+    /**
+     * Since the JS can not output time in the specified TimeZone we first
+     * manually shift the UTC timestamp onto tzOffset then use standard
+     * method to get an ISO8601 string and then manually replace 'Z' suffix
+     * (which is indicating UTC timezone) by the real TimeZone offset.
+     */
+    var tz = this.getTzOff();
+    var dt = new Date((this.getTime() + tz * 60) * 1000);
+
+    return sprintf("%.19s%s%02u:%02u", dt.toISOString(), tz < 0 ? '-' : '+',
+                   Math.floor(Math.abs(tz) / 60), tz % 60);
+};
+
+/**
  * format datatime for split
  * @return string
  */
