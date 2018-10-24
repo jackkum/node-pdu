@@ -82,15 +82,25 @@ SCTS.prototype.getTzOff = function()
  */
 SCTS.prototype._getDateTime = function()
 {
-    var dt = new Date(this.getTime() * 1000);
+    /**
+     * Since the JS can not output time in the specified TimeZone we first
+     * manually shift the UTC timestamp onto tzOffset and then use
+     * getUTC{Year,Month,etc.}() methods to get a Year, Month, etc.
+     */
+    var tz = this.getTzOff();
+    var dt = new Date((this.getTime() + tz * 60) * 1000);
+
+    tz = Math.floor(tz / 15);   /* To quarters of an hour */
     return sprintf(
-        '%02d%02d%02d%02d%02d%02d00', 
-        dt.getYear(),
-        dt.getMonth() + 1,
-        dt.getDate(),
-        dt.getHours(),
-        dt.getMinutes(),
-        dt.getSeconds()
+        '%02d%02d%02d%02d%02d%02d%02X',
+        dt.getUTCFullYear() % 100,
+        dt.getUTCMonth() + 1,
+        dt.getUTCDate(),
+        dt.getUTCHours(),
+        dt.getUTCMinutes(),
+        dt.getUTCSeconds(),
+        Math.floor(Math.abs(tz / 10)) * 16 + tz % 10 +
+        (tz < 0 ? 0x80 : 0x00)
     );
 };
 
