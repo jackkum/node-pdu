@@ -65,7 +65,7 @@ SCTS.prototype.getTime = function()
 SCTS.prototype._getDateTime = function()
 {
     var dt = new Date(this.getTime() * 1000);
-    return printf(
+    return sprintf(
         '%02d%02d%02d%02d%02d%02d00', 
         dt.getYear(),
         dt.getMonth() + 1,
