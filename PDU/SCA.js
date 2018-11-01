@@ -55,19 +55,23 @@ SCA.parse = function(isAddress)
     
     var buffer = new Buffer(PDU.getPduSubstr(2), 'hex');
     var sca  = new SCA(isAddress),
-        size = buffer[0];
+        size = buffer[0],
+        octets;
 
     if(size){
 
         // if is OA or DA size in digits
         if(isAddress){
             if((size % 2) !== 0){
-                size++;
+                octets = size + 1;
+            } else {
+                octets = size;
             }
         // else size in octets
         } else {
             size--;
             size *= 2;
+            octets = size;
         }
 
         buffer = new Buffer(PDU.getPduSubstr(2), 'hex');
@@ -75,7 +79,7 @@ SCA.parse = function(isAddress)
             new Type(buffer[0])
         );
 
-        var hex = PDU.getPduSubstr(size);
+        var hex = PDU.getPduSubstr(octets);
 
         switch(sca.getType().getType()){
             case Type.TYPE_UNKNOWN: 
@@ -84,11 +88,14 @@ SCA.parse = function(isAddress)
             case Type.TYPE_SUBSCRIBER_NET:
             case Type.TYPE_TRIMMED:
 
+                if (!isAddress && hex.charAt(size - 2) == 'F')  /* Detect padding char */
+                    size--;
+
                 sca.setPhone(
                     hex.match(/.{1,2}/g).map(function(b){
                         return SCA._map_filter_decode(b)
                                 .split("").reverse().join("");
-                    }).join("")
+                    }).join("").slice(0, size)
                 );
 
                 break;
