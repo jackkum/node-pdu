@@ -88,14 +88,15 @@ SCA.parse = function(isAddress)
                     hex.match(/.{1,2}/g).map(function(b){
                         return SCA._map_filter_decode(b)
                                 .split("").reverse().join("");
-                    }).join("")
+                    }).join(""),
+                    !isAddress
                 );
 
                 break;
 
             case Type.TYPE_ALPHANUMERICAL:
 
-                sca.setPhone(Helper.decode7Bit(hex));
+                sca.setPhone(Helper.decode7Bit(hex), !isAddress);
 
                 break;
 
