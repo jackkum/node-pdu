@@ -69,9 +69,11 @@ Data.parse = function(pdu)
  */
 Data.prototype.append = function(pdu)
 {
+    var self = this;
+
     pdu.getParts().forEach(function(part){
-        if( ! this._partExists(part)){
-            this._parts.push(part);
+        if( ! self._partExists(part)){
+            self._parts.push(part);
         }
     });
     
