@@ -95,8 +95,7 @@ Data.prototype._partExists = function(part)
         }
         
         if(_part.getHeader().getCurrent() === part.getHeader().getCurrent()){
-            result = false;
-            return false;
+            result = true;
         }
     });
     
