@@ -5,6 +5,8 @@ var PDU     = require('../../pdu'),
     
 function Part(parent, data, size, header)
 {
+    var Header = PDU.getModule('PDU/Data/Header');
+
     /**
      * header message
      * @var \Header
@@ -35,9 +37,9 @@ function Part(parent, data, size, header)
      */
     this._parent = parent;
     
-    // have params for header
-    if(header){
-        var Header = PDU.getModule('PDU/Data/Header');
+    if(header instanceof Header){   // have header
+        this._header = header;
+    } else if(header){              // have params for header
         // create header
         this._header = new Header(header);
     }

@@ -58,6 +58,14 @@ function verifyResultPdu(logPrefix, res, expRes, err)
             if (!verifyPduValue(logPrefix, 'timestamp', res, 'getScts().getIsoString()', expRes.scts.isoStr))
                 return false;
         }
+        if (expRes.udh !== undefined) {
+            if (!verifyPduValue(logPrefix, 'concat pointer', res, 'getData().getParts()[0].getHeader().getPointer()', expRes.udh.pointer))
+                return false;
+            if (!verifyPduValue(logPrefix, 'concat segments', res, 'getData().getParts()[0].getHeader().getSegments()', expRes.udh.segments))
+                return false;
+            if (!verifyPduValue(logPrefix, 'concat current', res, 'getData().getParts()[0].getHeader().getCurrent()', expRes.udh.current))
+                return false;
+        }
         if (expRes.data !== undefined) {
             if (!verifyPduValue(logPrefix, 'text', res, 'getData().getText()', expRes.data.text))
                 return false;
@@ -141,6 +149,13 @@ var parserTests = [
         name: 'Negative SCTS Time Zone offset',
         pduStr: '07919730071111F1000B919746121611F100008111700212222B0DC8329BFD6681EE6F399B1C02',
         expectedResult: {scts: {isoStr: '2018-11-07T20:21:22-08:00'}},
+    }, {
+        name: 'Concatenated message #1 (part 1/2) with 16bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
+        expectedResult: {
+            udh: {pointer: 0x1234, segments: 2, current: 1},
+            data: {text: 'Hello,'},
+        },
     }
 ];
 
