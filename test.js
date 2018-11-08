@@ -36,10 +36,29 @@ function verifyPduValue(logPrefix, valName, pdu, expr, expVal)
     return false;
 }
 
-function verifyResultPdu(logPrefix, res, expRes, err)
+function verifyResultPdu(logPrefix, res, expRes, err, expErr)
 {
-    if (err) {
-        console.log(logPrefix + 'fail: got an error: ' + err);
+    /**
+     * We have several fail cases in the context of error and result
+     * expectation:
+     *  * got an unexpected error (whatever we expects error or no)
+     *  * got no error, but the PDU mismatch our expectations
+     *  * got no error, while we expect some
+     *
+     * And respectively we have several ok cases:
+     *  * got an expected error and the PDU match to expectation, if any
+     *  * got no error and the PDU match to expectation, if any
+     *
+     * So in order to verify execution results give a higher priority to the
+     * error state verification and if everything is Ok then go to the PDU
+     * verification if we have some expectations against its contents.
+     */
+    if (err && (!expErr || err != expErr)) {
+        expErr = expErr ? ', expected: ' + expErr : '';
+        console.log(logPrefix + 'fail: got an error: ' + err + expErr);
+        return false;
+    } else if (!err && expErr) {
+        console.log(logPrefix + 'fail: got no error, while we expect: ' + expErr);
         return false;
     } else if (expRes) {
         if (expRes.sca !== undefined) {
@@ -172,7 +191,7 @@ for (let test of parserTests) {
         error = e.message;
     }
 
-    if (verifyResultPdu(logPrefix, msg, test.expectedResult, error)) {
+    if (verifyResultPdu(logPrefix, msg, test.expectedResult, error, test.expectedError)) {
         cntOk++;
         console.log(logPrefix + 'Ok');
     }
