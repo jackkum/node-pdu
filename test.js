@@ -175,6 +175,27 @@ var parserTests = [
             udh: {pointer: 0x1234, segments: 2, current: 1},
             data: {text: 'Hello,'},
         },
+    }, {
+        name: 'Concatenated message #1 (part 2/2) with 16bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000811170021232230F06080412340202A0FB5BCE268700',
+        expectedResult: {
+            udh: {pointer: 0x1234, segments: 2, current: 2},
+            data: {text: ' world!'},
+        },
+    }, {
+        name: 'Concatenated message #2 (part 1/2) with 16bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000811170021222230B06080412350201C8340B',
+        expectedResult: {
+            udh: {pointer: 0x1235, segments: 2, current: 1},
+            data: {text: 'Hi,'},
+        },
+    }, {
+        name: 'Concatenated message #2 (part 2/2) with 16bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000811170021232230F06080412350202A0FB5BCE268700',
+        expectedResult: {
+            udh: {pointer: 0x1235, segments: 2, current: 2},
+            data: {text: ' world!'},
+        },
     }
 ];
 
@@ -192,6 +213,53 @@ for (let test of parserTests) {
     }
 
     if (verifyResultPdu(logPrefix, msg, test.expectedResult, error, test.expectedError)) {
+        cntOk++;
+        console.log(logPrefix + 'Ok');
+    }
+}
+
+var appendTests = [
+    {
+        name: 'Simple concatenated message #1',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021232230F06080412340202A0FB5BCE268700',
+        expectedResult: {data: {text: 'Hello, world!'}},
+    }, {
+        name: 'Simple concatenated message #2, rev. parts order',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021232230F06080412350202A0FB5BCE268700',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021222230B06080412350201C8340B',
+        expectedResult: {data: {text: 'Hi, world!'}},
+    }, {
+        name: 'Duplicated parts of a concatenated message',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
+        expectedResult: {data: {text: 'Hello,'}},
+    }, {
+        name: 'Parts of different messages',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021232230F06080412350202A0FB5BCE268700',
+        expectedError: 'Part from different message',
+    }
+];
+
+testNum = 0;
+for (let test of appendTests) {
+    var logPrefix = makeLogPrefix('append', ++testNum, test.name);
+    var error = '';
+    var msg1 = undefined;
+    var msg2 = undefined;
+
+    cntTotal++;
+
+    try {
+        msg1 = pdu.parse(test.pduStr1);
+        msg2 = pdu.parse(test.pduStr2);
+        msg1.getData().append(msg2);
+    } catch (e) {
+        error = e.message;
+    }
+
+    if (verifyResultPdu(logPrefix, msg1, test.expectedResult, error, test.expectedError)) {
         cntOk++;
         console.log(logPrefix + 'Ok');
     }
