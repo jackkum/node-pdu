@@ -6,22 +6,10 @@ var PDU     = require('../../pdu'),
 function Header(params)
 {
     /**
-     * 
-     * @var integer
-     */
-    this._UDHL     = 6;
-    
-    /**
      *
      * @var integer
      */
-    this._TYPE     = 0x08; // 16bit
-    
-    /**
-     *
-     * @var integer
-     */
-    this._PSIZE    = 4;
+    this._TYPE     = undefined;
     
     /**
      *
@@ -42,11 +30,14 @@ function Header(params)
     this._CURRENT  = 1;
     
     if(params){
+        this._TYPE = Header.IE_CONCAT_16BIT_REF;
         this._SEGMENTS = params.SEGMENTS;
         this._CURRENT  = params.CURRENT;
         this._POINTER  = params.POINTER;
     }
 };
+
+Header.IE_CONCAT_16BIT_REF      = 0x08;
 
 /**
  * parse header
@@ -87,12 +78,12 @@ Header.prototype.toJSON = function()
 };
 
 /**
- * get header size
+ * get header size (UDHL value), in octets
  * @return integer
  */
 Header.prototype.getSize = function()
 {
-    return this._UDHL;
+    return this._TYPE === undefined ? 0 : 6;
 };
 
 /**
@@ -110,7 +101,7 @@ Header.prototype.getType = function()
  */
 Header.prototype.getPointerSize = function()
 {
-    return this._PSIZE;
+    return this._TYPE === undefined ? 0 : 4;
 };
 
 /**
@@ -147,9 +138,13 @@ Header.prototype.getCurrent = function()
 Header.prototype.toString = function()
 {
     var head = '';
-    head += sprintf("%02X", this._UDHL);
+
+    if (this._TYPE === undefined)
+        return '';
+
+    head += sprintf("%02X", 6);
     head += sprintf("%02X", this._TYPE);
-    head += sprintf("%02X", this._PSIZE);
+    head += sprintf("%02X", 4);
     head += sprintf("%04X", this._POINTER);
     head += sprintf("%02X", this._SEGMENTS);
     head += sprintf("%02X", this._CURRENT);
