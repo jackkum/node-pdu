@@ -65,9 +65,6 @@ Header.parse = function()
         current   = buffer[1];
     
     var self = new Header({
-            'UDHL':     udhl,
-            'TYPE':     type,
-            'PSIZE':    psize,
             'POINTER':  pointer,
             'SEGMENTS': sergments,
             'CURRENT':  current
@@ -83,9 +80,6 @@ Header.parse = function()
 Header.prototype.toJSON = function()
 {
     return {
-        'UDHL':     this._UDHL,
-        'TYPE':     this._TYPE,
-        'PSIZE':    this._PSIZE,
         'POINTER':  this._POINTER,
         'SEGMENTS': this._SEGMENTS,
         'CURRENT':  this._CURRENT
