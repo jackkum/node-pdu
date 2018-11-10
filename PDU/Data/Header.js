@@ -41,11 +41,11 @@ function Header(params)
      */
     this._CURRENT  = 1;
     
-    params = params || {};
-    
-    this._SEGMENTS = params.SEGMENTS || 1;
-    this._CURRENT  = params.CURRENT  || 1;
-    this._POINTER  = params.POINTER  || Math.floor(Math.random() * 0xFFFF);
+    if(params){
+        this._SEGMENTS = params.SEGMENTS;
+        this._CURRENT  = params.CURRENT;
+        this._POINTER  = params.POINTER;
+    }
 };
 
 /**
