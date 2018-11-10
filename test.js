@@ -196,6 +196,27 @@ var parserTests = [
             udh: {pointer: 0x1235, segments: 2, current: 2},
             data: {text: ' world!'},
         },
+    }, {
+        name: 'Concatenated message #3 (part 1/3) with 16bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000811170021222230E060804123403015774987E9A03',
+        expectedResult: {
+            udh: {pointer: 0x1234, segments: 3, current: 1},
+            data: {text: 'What\'s'},
+        },
+    }, {
+        name: 'Concatenated message #3 (part 2/3) with 16bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000811170021232230C06080412340302A03A9C05',
+        expectedResult: {
+            udh: {pointer: 0x1234, segments: 3, current: 2},
+            data: {text: ' up,'},
+        },
+    }, {
+        name: 'Concatenated message #3 (part 3/3) with 16bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000811170021242230D06080412340303A076D8FD03',
+        expectedResult: {
+            udh: {pointer: 0x1234, segments: 3, current: 3},
+            data: {text: ' man?'},
+        },
     }
 ];
 
@@ -230,6 +251,21 @@ var appendTests = [
         pduStr2: '07919730071111F1400B919746121611F10000811170021222230B06080412350201C8340B',
         expectedResult: {data: {text: 'Hi, world!'}},
     }, {
+        name: 'Simple concatenated message #3, parts 1 & 2',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021222230E060804123403015774987E9A03',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021232230C06080412340302A03A9C05',
+        expectedResult: {data: {text: 'What\'s up,'}},
+    }, {
+        name: 'Simple concatenated message #3, parts 1 & 3',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021222230E060804123403015774987E9A03',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021242230D06080412340303A076D8FD03',
+        expectedResult: {data: {text: 'What\'s man?'}},
+    }, {
+        name: 'Simple concatenated message #3, parts 2 & 3',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021232230C06080412340302A03A9C05',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021242230D06080412340303A076D8FD03',
+        expectedResult: {data: {text: ' up, man?'}},
+    }, {
         name: 'Duplicated parts of a concatenated message',
         pduStr1: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
         pduStr2: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
@@ -238,6 +274,11 @@ var appendTests = [
         name: 'Parts of different messages',
         pduStr1: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
         pduStr2: '07919730071111F1400B919746121611F10000811170021232230F06080412350202A0FB5BCE268700',
+        expectedError: 'Part from different message',
+    }, {
+        name: 'Parts with a collided identifiers',
+        pduStr1: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
+        pduStr2: '07919730071111F1400B919746121611F10000811170021232230C06080412340302A03A9C05',
         expectedError: 'Part from different message',
     }
 ];

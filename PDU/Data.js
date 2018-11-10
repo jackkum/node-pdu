@@ -90,7 +90,8 @@ Data.prototype._partExists = function(part)
 {
     var result = false;
     this._parts.forEach(function(_part){
-        if(part.getHeader().getPointer() !== _part.getHeader().getPointer()){
+        if(part.getHeader().getPointer() !== _part.getHeader().getPointer() ||
+           part.getHeader().getSegments() !== _part.getHeader().getSegments()){
             throw new Error("Part from different message");
         }
         
