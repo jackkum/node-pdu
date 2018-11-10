@@ -81,7 +81,8 @@ Part.parse = function(data)
     switch(alphabet){
         case DCS.ALPHABET_DEFAULT:
             PDU.debug("Helper.decode7Bit(" + hex + ")");
-            text = Helper.decode7Bit(hex);
+            length = udl - Math.ceil(hdrSz * 8 / 7);    /* Convert octets to septets */
+            text = Helper.decode7Bit(hex, length);
             break;
         
         case DCS.ALPHABET_8BIT:

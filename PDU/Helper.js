@@ -88,15 +88,17 @@ Helper.decode8Bit = function(text)
 /**
  * decode message from 7bit
  * @param string $text
+ * @param int $inLen
  * @return string
  */
-Helper.decode7Bit = function(text)
+Helper.decode7Bit = function(text, inLen)
 {
     var ret   = [],
         data  = new Buffer(text, "hex"),
         mask  = 0xFF,
         shift = 0,
         carry = 0,
+        inDone = 0,
         inExt = false;
     
     for(var i = 0; i < data.length; i++){
@@ -112,6 +114,7 @@ Helper.decode7Bit = function(text)
                     ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
                 }
             }
+            inDone++;
             carry = 0;
             shift = 0;
         }
@@ -132,11 +135,12 @@ Helper.decode7Bit = function(text)
                 ret.push(Helper.ALPHABET_7BIT.charCodeAt(digit));
             }
         }
+        inDone++;
 
         shift++;
     }
     
-    if (carry){
+    if (inLen !== undefined ? inDone < inLen : carry){
         ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
     }
     

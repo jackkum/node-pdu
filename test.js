@@ -127,6 +127,8 @@ var sevenBitEncodingTests = [
         name: '8 symbols', text: 'abcdefgh', code: '61F1985C369FD1',
     }, {
         name: '9 symbols', text: 'abcdefghi', code: '61F1985C369FD169',
+    }, {
+        name: '"@" loss', text: 'abcdefg@', code: '61F1985C369F01', codeLen: 8,
     }
 ];
 
@@ -144,7 +146,7 @@ for (let test of sevenBitEncodingTests) {
         console.log(logPrefix + 'fail: encoder error (text: "' + test.text + '", expecting: "' + test.code + '", got "' + out[1] + '")');
     }
 
-    out = Helper.decode7Bit(test.code);
+    out = Helper.decode7Bit(test.code, test.codeLen);
     if (out != test.text) {
         passed = false;
         console.log(logPrefix + 'fail: decoder error (code: "' + test.code + '", expecting: "' + test.text + '", got "' + out + '")');
@@ -185,6 +187,15 @@ var parserTests = [
                 text: '\u041f\u0440\u0438\u0432\u0435\u0442, \u043c\u0438\u0440!', /* Russian: "Hello, world!" */
             },
         }
+    }, {
+        name: 'Alphanumeric OA',
+        pduStr: '07911326060032F0000DD0D432DBFC96D30100001121313121114012D7327BFC6E9741F437885A669BDF723A',
+        expectedResult: {
+            sca: {isAddress: false, phone: '31626000230'},
+            address: {isAddress: true, phone: 'Telfort'},
+            scts: {isoStr: '2011-12-13T13:12:11+01:00'},
+            data: {text: 'Welcome to Telfort'},
+        },
     }, {
         name: 'Concatenated message #1 (part 1/2) with 16bit ref.',
         pduStr: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',

@@ -103,7 +103,8 @@ SCA.parse = function(isAddress)
 
             case Type.TYPE_ALPHANUMERICAL:
 
-                sca.setPhone(Helper.decode7Bit(hex), !isAddress);
+                size = Math.floor(size * 4 / 7);    /* semi-octets to septets */
+                sca.setPhone(Helper.decode7Bit(hex, size), !isAddress);
 
                 break;
 
