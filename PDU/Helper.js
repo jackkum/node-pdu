@@ -95,35 +95,27 @@ Helper.decode7Bit = function(text, inLen)
 {
     var ret   = [],
         data  = new Buffer(text, "hex"),
-        mask  = 0xFF,
-        shift = 0,
-        carry = 0,
+        dataPos = 0,        /* Position in the input octets stream */
+        buf   = 0,          /* Bit buffer, used in FIFO manner */
+        bufLen = 0,         /* Ammount of buffered bits */
         inDone = 0,
         inExt = false;
     
-    for(var i = 0; i < data.length; i++){
-        var char = data[i];
-        if(shift === 7){
-            if(carry % 128 == 27){
-                inExt = true;
-            } else {
-                if(inExt){
-                    ret.push(Helper.EXTENDED_TABLE.charCodeAt(carry));
-                    inExt = false;
-                } else {
-                    ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
-                }
-            }
-            inDone++;
-            carry = 0;
-            shift = 0;
-        }
-        
-        var a = (mask >> (shift+1)) & 0xFF,
-            b = a ^ 0xFF;
+    while (true) {
+        if(bufLen < 7){
+            if(dataPos == data.length)
+                break;
 
-        var digit = (carry) | ((char & a) << (shift)) & 0xFF;
-        carry = (char & b) >> (7-shift);
+            /* Move next input octet to the FIFO buffer */
+            buf |= data[dataPos++] << bufLen;
+            bufLen += 8;
+        }
+
+        /* Fetch next septet from the FIFO buffer */
+        var digit = buf & 0x7f;
+        buf >>= 7;
+        bufLen -= 7;
+        inDone++;
 
         if(digit % 128 == 27){
             inExt = true;
@@ -135,16 +127,15 @@ Helper.decode7Bit = function(text, inLen)
                 ret.push(Helper.ALPHABET_7BIT.charCodeAt(digit));
             }
         }
-        inDone++;
 
-        shift++;
-    }
-    
-    if (inLen !== undefined ? inDone < inLen : carry){
-        if(inExt){
-            ret.push(Helper.EXTENDED_TABLE.charCodeAt(carry));
+        /* Do we process all input data */
+        if(inLen === undefined){
+            /* If we have only the final (possibly padding) septet and it's empty */
+            if(dataPos == data.length && bufLen == 7 && !buf)
+                break;
         } else {
-            ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
+            if(inDone >= inLen)
+                break;
         }
     }
     
