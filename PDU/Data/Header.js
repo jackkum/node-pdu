@@ -99,7 +99,12 @@ Header.prototype.toJSON = function()
  */
 Header.prototype.getSize = function()
 {
-    return this._TYPE === undefined ? 0 : 6;
+    var udhl = 0;
+
+    for (var ie of this._ies)
+        udhl += 2 + ie.dataHex.length / 2;
+
+    return udhl;
 };
 
 /**
@@ -153,19 +158,15 @@ Header.prototype.getCurrent = function()
  */
 Header.prototype.toString = function()
 {
+    var udhl = 0;
     var head = '';
 
-    if (this._TYPE === undefined)
-        return '';
-
-    head += sprintf("%02X", 6);
-    head += sprintf("%02X", this._TYPE);
-    head += sprintf("%02X", 4);
-    head += sprintf("%04X", this._POINTER);
-    head += sprintf("%02X", this._SEGMENTS);
-    head += sprintf("%02X", this._CURRENT);
+    for (var ie of this._ies) {
+        udhl += 2 + ie.dataHex.length / 2;
+        head += sprintf("%02X%02X", ie.type, ie.dataHex.length / 2) + ie.dataHex;
+    }
     
-    return head;
+    return sprintf("%02X", udhl) + head;
 };
 
 module.exports = Header;
