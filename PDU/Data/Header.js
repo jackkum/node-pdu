@@ -19,24 +19,6 @@ function Header(params)
      */
     this._concatIeIdx = undefined;
     
-    /**
-     *
-     * @var integer
-     */
-    this._POINTER  = 0;
-    
-    /**
-     *
-     * @var integer
-     */
-    this._SEGMENTS = 1;
-    
-    /**
-     *
-     * @var integer
-     */
-    this._CURRENT  = 1;
-    
     if(params){
         var dataHex = sprintf("%04X%02X%02X",
                               params.POINTER,
@@ -45,11 +27,13 @@ function Header(params)
         this._ies.push({
             type: Header.IE_CONCAT_16BIT_REF,
             dataHex: dataHex,
+            data: {
+                msgRef: params.POINTER,
+                maxMsgNum: params.SEGMENTS,
+                msgSeqNo: params.CURRENT
+            }
         });
         this._concatIeIdx = this._ies.length - 1;
-        this._SEGMENTS = params.SEGMENTS;
-        this._CURRENT  = params.CURRENT;
-        this._POINTER  = params.POINTER;
     }
 };
 
@@ -87,9 +71,9 @@ Header.parse = function()
 Header.prototype.toJSON = function()
 {
     return {
-        'POINTER':  this._POINTER,
-        'SEGMENTS': this._SEGMENTS,
-        'CURRENT':  this._CURRENT
+        'POINTER':  this.getPointer(),
+        'SEGMENTS': this.getSegments(),
+        'CURRENT':  this.getCurrent(),
     };
 };
 
@@ -133,7 +117,8 @@ Header.prototype.getPointerSize = function()
  */
 Header.prototype.getPointer = function()
 {
-    return this._POINTER;
+    return this._concatIeIdx === undefined ? 0 :
+           this._ies[this._concatIeIdx].data.msgRef;
 };
 
 /**
@@ -142,7 +127,8 @@ Header.prototype.getPointer = function()
  */
 Header.prototype.getSegments = function()
 {
-    return this._SEGMENTS;
+    return this._concatIeIdx === undefined ? 1 :
+           this._ies[this._concatIeIdx].data.maxMsgNum;
 };
 
 /**
@@ -151,7 +137,8 @@ Header.prototype.getSegments = function()
  */
 Header.prototype.getCurrent = function()
 {
-    return this._CURRENT;
+    return this._concatIeIdx === undefined ? 1 :
+           this._ies[this._concatIeIdx].data.msgSeqNo;
 };
 
 /**
