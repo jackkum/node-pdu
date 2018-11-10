@@ -59,6 +59,7 @@ Part.parse = function(data)
     
     var alphabet = data.getPdu().getDcs().getTextAlphabet(),
         header   = null,
+        udl      = data.getPdu().getUdl(),
         length   = data.getPdu().getUdl() * (alphabet === DCS.ALPHABET_UCS2 ? 4 : 2),
         text     = undefined;
     
@@ -89,12 +90,11 @@ Part.parse = function(data)
             throw new Error("Unknown alpabet");
     }
     
-    var size = text.length,
-        self = new Part(data, hex, size, header);
+    var self = new Part(data, hex, udl, header);
     
     self._text = text;
     
-    return [text, size, self];
+    return [text, udl, self];
 };
 
 /**

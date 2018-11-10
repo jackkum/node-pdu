@@ -86,6 +86,8 @@ function verifyResultPdu(logPrefix, res, expRes, err, expErr)
                 return false;
         }
         if (expRes.data !== undefined) {
+            if (!verifyPduValue(logPrefix, 'data size', res, 'getData().getSize()', expRes.data.size))
+                return false;
             if (!verifyPduValue(logPrefix, 'text', res, 'getData().getText()', expRes.data.text))
                 return false;
         }
@@ -168,6 +170,21 @@ var parserTests = [
         name: 'Negative SCTS Time Zone offset',
         pduStr: '07919730071111F1000B919746121611F100008111700212222B0DC8329BFD6681EE6F399B1C02',
         expectedResult: {scts: {isoStr: '2018-11-07T20:21:22-08:00'}},
+    }, {
+        name: 'Extended 7 bit symbols #1',
+        pduStr: '07919730071111F1000B919746121611F10000811170021222230A1B5E583C2697CD1B1F',
+        expectedResult: {
+            data: {size: 10, text: '[abcdef]'},
+        }
+    }, {
+        name: 'UCS2 encoded #1',
+        pduStr: '07919730071111F1000B919746121611F100088111800212222318041F04400438043204350442002C0020043C043804400021',
+        expectedResult: {
+            data: {
+                size: 24,
+                text: '\u041f\u0440\u0438\u0432\u0435\u0442, \u043c\u0438\u0440!', /* Russian: "Hello, world!" */
+            },
+        }
     }, {
         name: 'Concatenated message #1 (part 1/2) with 16bit ref.',
         pduStr: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
