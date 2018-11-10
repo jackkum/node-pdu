@@ -60,15 +60,23 @@ Part.parse = function(data)
     var alphabet = data.getPdu().getDcs().getTextAlphabet(),
         header   = null,
         udl      = data.getPdu().getUdl(),
-        length   = data.getPdu().getUdl() * (alphabet === DCS.ALPHABET_UCS2 ? 4 : 2),
+        length   = 0,
+        hdrSz    = 0,           /* Header full size: UDHL + UDH */
         text     = undefined;
+
+    if(alphabet == DCS.ALPHABET_DEFAULT)
+        length = Math.ceil(udl * 7 / 8);    /* Convert septets to octets */
+    else
+        length = udl;                       /* Length already in octets */
     
     if(data.getPdu().getType().getUdhi()){
         PDU.debug("Header.parse()");
         header = Header.parse();
+        hdrSz = 1 + header.getSize();   /* UDHL field length + UDH length */
+        length -= hdrSz;
     }
     
-    var hex = PDU.getPduSubstr(length);
+    var hex = PDU.getPduSubstr(length * 2); /* Extract Octets x2 chars */
     
     switch(alphabet){
         case DCS.ALPHABET_DEFAULT:
