@@ -6,6 +6,14 @@ var PDU     = require('../../pdu'),
 function Header(params)
 {
     /**
+     * Header Information Elements
+     * Each array element contains at least an IE type and raw IE data in the
+     * form of a hexadecimal string.
+     * @var array
+     */
+    this._ies = [];
+
+    /**
      *
      * @var integer
      */
@@ -30,6 +38,14 @@ function Header(params)
     this._CURRENT  = 1;
     
     if(params){
+        var dataHex = sprintf("%04X%02X%02X",
+                              params.POINTER,
+                              params.SEGMENTS,
+                              params.CURRENT);
+        this._ies.push({
+            type: Header.IE_CONCAT_16BIT_REF,
+            dataHex: dataHex,
+        });
         this._TYPE = Header.IE_CONCAT_16BIT_REF;
         this._SEGMENTS = params.SEGMENTS;
         this._CURRENT  = params.CURRENT;
