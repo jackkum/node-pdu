@@ -14,10 +14,10 @@ function Header(params)
     this._ies = [];
 
     /**
-     *
+     * Index of the concatenation IE
      * @var integer
      */
-    this._TYPE     = undefined;
+    this._concatIeIdx = undefined;
     
     /**
      *
@@ -46,7 +46,7 @@ function Header(params)
             type: Header.IE_CONCAT_16BIT_REF,
             dataHex: dataHex,
         });
-        this._TYPE = Header.IE_CONCAT_16BIT_REF;
+        this._concatIeIdx = this._ies.length - 1;
         this._SEGMENTS = params.SEGMENTS;
         this._CURRENT  = params.CURRENT;
         this._POINTER  = params.POINTER;
@@ -113,7 +113,8 @@ Header.prototype.getSize = function()
  */
 Header.prototype.getType = function()
 {
-    return this._TYPE;
+    return this._concatIeIdx === undefined ? undefined :
+           this._ies[this._concatIeIdx].type;
 };
 
 /**
@@ -122,7 +123,8 @@ Header.prototype.getType = function()
  */
 Header.prototype.getPointerSize = function()
 {
-    return this._TYPE === undefined ? 0 : 4;
+    return this._concatIeIdx === undefined ? 0 :
+           this._ies[this._concatIeIdx].dataHex.length / 2;
 };
 
 /**
