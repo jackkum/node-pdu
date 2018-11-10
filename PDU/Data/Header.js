@@ -19,7 +19,34 @@ function Header(params)
      */
     this._concatIeIdx = undefined;
     
-    if(params){
+    if(Array.isArray(params)){
+        /**
+         * NB: This code can be factored out into a separate method if we have
+         * a usecase for it.
+         */
+        for (var ie of params) {
+            var buf = new Buffer(ie.dataHex, 'hex');
+            var data = undefined;
+
+            /* Parse known IEs (e.g. concatenetion) */
+            switch (ie.type) {
+            case Header.IE_CONCAT_16BIT_REF:
+                this._concatIeIdx = this._ies.length;   /* Preserve IE index */
+                data = {
+                    msgRef: (buf[0] << 8) | buf[1],
+                    maxMsgNum: buf[2],
+                    msgSeqNo: buf[3]
+                }
+                break;
+            }
+
+            this._ies.push({
+                type: ie.type,
+                dataHex: ie.dataHex,
+                data: data,
+            });
+        }
+    } else if(params){
         var dataHex = sprintf("%04X%02X%02X",
                               params.POINTER,
                               params.SEGMENTS,
