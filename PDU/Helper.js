@@ -141,7 +141,11 @@ Helper.decode7Bit = function(text, inLen)
     }
     
     if (inLen !== undefined ? inDone < inLen : carry){
-        ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
+        if(inExt){
+            ret.push(Helper.EXTENDED_TABLE.charCodeAt(carry));
+        } else {
+            ret.push(Helper.ALPHABET_7BIT.charCodeAt(carry));
+        }
     }
     
     return (new Buffer(ret, "binary")).toString();

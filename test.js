@@ -129,6 +129,8 @@ var sevenBitEncodingTests = [
         name: '9 symbols', text: 'abcdefghi', code: '61F1985C369FD169',
     }, {
         name: '"@" loss', text: 'abcdefg@', code: '61F1985C369F01', codeLen: 8,
+    }, {
+        name: 'final "}" decoding error', text: '{test}', code: '1B14BD3CA76F52',
     }
 ];
 
@@ -177,6 +179,12 @@ var parserTests = [
         pduStr: '07919730071111F1000B919746121611F10000811170021222230A1B5E583C2697CD1B1F',
         expectedResult: {
             data: {size: 10, text: '[abcdef]'},
+        }
+    }, {
+        name: 'Extended 7 bit symbols #2',
+        pduStr: '07919730071111F1000B919746121611F1000081117002122223081B14BD3CA76F52',
+        expectedResult: {
+            data: {size: 8, text: '{test}'},
         }
     }, {
         name: 'UCS2 encoded #1',
