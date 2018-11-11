@@ -21,7 +21,7 @@ function DCS()
      * is compressed text
      * @var boolean
      */
-    this._compressedText = true;
+    this._compressedText = false;
     
     /**
      * Text alphabet
@@ -356,7 +356,7 @@ DCS.prototype.setTextAlphabet = function(alphabet)
     
     switch(this._alphabet){
         case DCS.ALPHABET_DEFAULT:
-            this.setTextCompressed();
+
             break;
         
         case DCS.ALPHABET_8BIT:
