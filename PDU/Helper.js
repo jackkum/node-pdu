@@ -173,14 +173,19 @@ Helper.encode8Bit = function(text)
 /**
  * encode message
  * @param string $text
+ * @param int $alignBits
  * @return array
  */
-Helper.encode7Bit = function(text)
+Helper.encode7Bit = function(text, alignBits)
 {
     var ret    = "",
         buf    = 0,         /* Bit buffer, used in FIFO manner */
         bufLen = 0,         /* Ammount of buffered bits */
         len    = 0;         /* Ammount of produced septets */
+
+    /* Insert leading alignment zero bits if requested */
+    if(alignBits)
+        bufLen += alignBits;
 
     for (let symb of text) {
         var code;

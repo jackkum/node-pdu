@@ -131,6 +131,8 @@ var sevenBitEncodingTests = [
         name: '"@" loss', text: 'abcdefg@', code: '61F1985C369F01', codeLen: 8,
     }, {
         name: 'final "}" decoding error', text: '{test}', code: '1B14BD3CA76F52',
+    }, {
+        name: 'text with alignment', text: 'abc', code: '088BC7', alignBits: 3,
     }
 ];
 
@@ -142,13 +144,13 @@ for (let test of sevenBitEncodingTests) {
 
     cntTotal++;
 
-    out = Helper.encode7Bit(test.text);
+    out = Helper.encode7Bit(test.text, test.alignBits);
     if (out[1] != test.code) {
         passed = false;
         console.log(logPrefix + 'fail: encoder error (text: "' + test.text + '", expecting: "' + test.code + '", got "' + out[1] + '")');
     }
 
-    out = Helper.decode7Bit(test.code, test.codeLen);
+    out = Helper.decode7Bit(test.code, test.codeLen, test.alignBits);
     if (out != test.text) {
         passed = false;
         console.log(logPrefix + 'fail: decoder error (code: "' + test.code + '", expecting: "' + test.text + '", got "' + out + '")');
