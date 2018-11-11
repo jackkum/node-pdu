@@ -60,18 +60,14 @@ SCA.parse = function(isAddress)
 
     if(size){
 
-        // if is OA or DA size in digits
+        // if is OA or DA then the size in semi-octets
         if(isAddress){
-            if((size % 2) !== 0){
-                octets = size + 1;
-            } else {
-                octets = size;
-            }
+            octets = Math.ceil(size / 2);   /* to full octets */
         // else size in octets
         } else {
             size--;
-            size *= 2;
             octets = size;
+            size *= 2;          /* to semi-octets for future usage */
         }
 
         buffer = new Buffer(PDU.getPduSubstr(2), 'hex');
@@ -79,7 +75,7 @@ SCA.parse = function(isAddress)
             new Type(buffer[0])
         );
 
-        var hex = PDU.getPduSubstr(octets);
+        var hex = PDU.getPduSubstr(octets * 2);
 
         switch(sca.getType().getType()){
             case Type.TYPE_UNKNOWN: 
