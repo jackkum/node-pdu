@@ -117,10 +117,10 @@ SCTS.prototype._getDateTime = function()
      * manually shift the UTC timestamp onto tzOffset and then use
      * getUTC{Year,Month,etc.}() methods to get a Year, Month, etc.
      */
-    var tz = this.getTzOff();
+    var tz = this.getTzOff(), tzAbs = 0;
     var dt = new Date((this.getTime() + tz * 60) * 1000);
 
-    tz = Math.floor(tz / 15);   /* To quarters of an hour */
+    tzAbs = Math.floor(Math.abs(tz) / 15);    /* To quarters of an hour */
     return sprintf(
         '%02d%02d%02d%02d%02d%02d%02X',
         dt.getUTCFullYear() % 100,
@@ -129,7 +129,7 @@ SCTS.prototype._getDateTime = function()
         dt.getUTCHours(),
         dt.getUTCMinutes(),
         dt.getUTCSeconds(),
-        Math.floor(Math.abs(tz / 10)) * 16 + tz % 10 +
+        Math.floor(tzAbs / 10) * 16 + tzAbs % 10 +
         (tz < 0 ? 0x80 : 0x00)
     );
 };
