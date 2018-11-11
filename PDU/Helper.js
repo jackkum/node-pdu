@@ -170,49 +170,6 @@ Helper.encode8Bit = function(text)
     return [length, pdu];
 };
 
-Helper._get7BitChar = function(char){
-    var index;
-
-    index = Helper.ALPHABET_7BIT.indexOf(String.fromCharCode(char));
-    
-    if(index != -1){
-      return index;
-    }
-
-    index = Helper.EXTENDED_TABLE.indexOf(String.fromCharCode(char));
-
-    if(index != -1){
-      return index;
-    }
-
-    return char;
-}
-
-Helper._convert7BitChar = function(text){
-    var data = new Buffer(text)
-    var len  = data.length;
-    var res  = "";
-
-    for (var i = 0; i < len; i++) {
-        var index, char = data[i] & 0x7F;
-
-        index = Helper.ALPHABET_7BIT.indexOf(String.fromCharCode(char));
-        
-        if(index != -1){
-            res += Helper.char(index);
-            continue;
-        }
-
-        index = Helper.EXTENDED_TABLE.indexOf(String.fromCharCode(char));
-
-        if(index != -1){
-            res += Helper.char(27) + Helper.char(index);
-        }
-    }
-
-    return new Buffer(res);
-};
-
 /**
  * encode message
  * @param string $text
@@ -220,34 +177,39 @@ Helper._convert7BitChar = function(text){
  */
 Helper.encode7Bit = function(text)
 {
-    var ret   = [],
-        data  = Helper._convert7BitChar(text),
-        mask  = 0xFF,
-        shift = 0,
-        len   = data.length;
-    
-    for (var i = 0; i < len; i++) {
-        
-        var char     = data[i],
-            nextChar = (i+1 < len) ? data[i+1] : 0;
-        
-        if (shift === 7) { shift = 0; continue; }
-        
-        var carry  = (nextChar & (((mask << (shift+1)) ^ 0xFF) & 0xFF)),
-            digit  = ((carry << (7-shift)) | (char >> shift) ) & 0xFF;
-    
-        ret.push(digit);
-        
-        shift++;
+    var ret    = "",
+        buf    = 0,         /* Bit buffer, used in FIFO manner */
+        bufLen = 0,         /* Ammount of buffered bits */
+        len    = 0;         /* Ammount of produced septets */
+
+    for (let symb of text) {
+        var code;
+
+        if((code = Helper.ALPHABET_7BIT.indexOf(symb)) != -1){
+            buf |= code << bufLen;
+            bufLen += 7;
+            len++;
+        } else if((code = Helper.EXTENDED_TABLE.indexOf(symb)) != -1){
+            buf |= ((code << 7) | 27) << bufLen;
+            bufLen += 14;
+            len += 2;
+        } else {
+            buf |= 37 << bufLen;    /* Place space symbol */
+            bufLen += 7;
+            len++;
+        }
+
+        while (bufLen >= 8) {
+            ret += sprintf("%02X", buf & 0xff);
+            buf >>= 8;
+            bufLen -= 8;
+        }
     }
-    
-    ret.unshift(
-        ret.map(function(){
-            return "%02X";
-        }).join("")
-    );
-    
-    return [len, sprintf.apply(sprintf, ret)];
+
+    if(bufLen)
+        ret += sprintf("%02X", buf);    /* here we have less then 8 bits */
+
+    return [len, ret];
 };
 
 /**
