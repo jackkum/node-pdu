@@ -256,6 +256,20 @@ var parserTests = [
             data: {text: ' man?'},
         },
     }, {
+        name: 'Concatenated message #4 (part 1/2) with 8bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000100161916223230D0500032E020190E175DD1D06',
+        expectedResult: {
+            udh: {pointer: 0x2e, segments: 2, current: 1},
+            data: {text: 'Hakuna'},
+        },
+    }, {
+        name: 'Concatenated message #4 (part 2/2) with 8bit ref.',
+        pduStr: '07919730071111F1400B919746121611F10000100161916233230E0500032E020240ED303D4C0F03',
+        expectedResult: {
+            udh: {pointer: 0x2e, segments: 2, current: 2},
+            data: {text: ' matata'},
+        },
+    }, {
         name: 'EMS formatted text #1',
         pduStr: '07919730071111F1400B919746121611F100008111701222322342140A030004100A030606200A030E09400A031C0D80C2379BCC0225E961767ACC0255DDE4B29C9D76974161371934A5CBD3EB321D2D7FD7CF6817',
         expectedResult: {data: {text: 'Bold, Italic, Underline and Strikethrough.'}},
@@ -326,6 +340,11 @@ var appendTests = [
         pduStr1: '07919730071111F1400B919746121611F10000811170021222230E06080412340201C8329BFD6601',
         pduStr2: '07919730071111F1400B919746121611F10000811170021232230C06080412340302A03A9C05',
         expectedError: 'Part from different message',
+    }, {
+        name: 'Concat message with 8bit ref.',
+        pduStr1: '07919730071111F1400B919746121611F10000100161916223230D0500032E020190E175DD1D06',
+        pduStr2: '07919730071111F1400B919746121611F10000100161916233230E0500032E020240ED303D4C0F03',
+        expectedResult: {data: {text: 'Hakuna matata'}},
     }
 ];
 

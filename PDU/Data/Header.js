@@ -30,6 +30,14 @@ function Header(params)
 
             /* Parse known IEs (e.g. concatenetion) */
             switch (ie.type) {
+            case Header.IE_CONCAT_8BIT_REF:
+                this._concatIeIdx = this._ies.length;   /* Preserve IE index */
+                data = {
+                    msgRef: buf[0],
+                    maxMsgNum: buf[1],
+                    msgSeqNo: buf[2]
+                }
+                break;
             case Header.IE_CONCAT_16BIT_REF:
                 this._concatIeIdx = this._ies.length;   /* Preserve IE index */
                 data = {
@@ -64,6 +72,7 @@ function Header(params)
     }
 };
 
+Header.IE_CONCAT_8BIT_REF       = 0x00;
 Header.IE_CONCAT_16BIT_REF      = 0x08;
 
 /**
