@@ -142,7 +142,7 @@ SCA.prototype.setPhone = function(phone, SC)
         
         // get size
         // service center addres counting by octets OA or DA as length numbers
-        this._size = SC ? 1 + ((clear.length + 1)/2) : clear.length;
+        this._size = SC ? 1 + Math.ceil(clear.length / 2) : clear.length;
         
         this._encoded = clear.split("").map(function(s){
             return SCA._map_filter_encode(s);
