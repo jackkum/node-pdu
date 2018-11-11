@@ -133,13 +133,8 @@ DCS.parse = function()
         
         default:
             
-            if(dcs._encodeGroup & (1<<4)){
-                dcs._useMessageClass = true;
-            }
-            
-            if(dcs._encodeGroup & (1<<5)){
-                dcs._compressedText = true;
-            }
+            dcs._useMessageClass = !!(dcs._encodeGroup & (1<<0));
+            dcs._compressedText = !!(dcs._encodeGroup & (1<<1));
     }
     
     if(dcs._discardMessage || dcs._storeMessage || dcs._storeMessageUCS2){
@@ -167,16 +162,12 @@ DCS.prototype.getValue = function()
     
     // set message class bit
     if(this._useMessageClass){
-        this._encodeGroup |= (1<<4);
-    } else {
-        this._encodeGroup &= ~(1<<4);
+        this._encodeGroup |= (1<<0);
     }
     
     // set is compressed bit
     if(this._compressedText){
-        this._encodeGroup |= (1<<5);
-    } else {
-        this._encodeGroup &= ~(1<<5);
+        this._encodeGroup |= (1<<1);
     }
     
     // change encoding format

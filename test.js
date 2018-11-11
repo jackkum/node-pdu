@@ -73,6 +73,10 @@ function verifyResultPdu(logPrefix, res, expRes, err, expErr)
             if (!verifyPduValue(logPrefix, 'phone', res, 'getAddress().getPhone()', expRes.address.phone))
                 return false;
         }
+        if (expRes.dcs !== undefined) {
+            if (!verifyPduValue(logPrefix, 'DCS value', res, 'getDcs().getValue()', expRes.dcs.value))
+                return false;
+        }
         if (expRes.scts !== undefined) {
             if (!verifyPduValue(logPrefix, 'timestamp', res, 'getScts().getIsoString()', expRes.scts.isoStr))
                 return false;
@@ -277,6 +281,13 @@ var parserTests = [
         name: 'EMS formatted text #2',
         pduStr: '07919730071111F1400B919746121611F100008111701222822310050A03000410846F3619F476B3F3',
         expectedResult: {data: {text: 'Bold only'}},
+    }, {
+        name: 'Flash SMS',
+        pduStr: '07919730071111F1000B919746121611F10010811170021222231054747A0E4ACF416190991D9EA343',
+        expectedResult: {
+            dcs: {value: 0x10},
+            data: {text: 'This is a flash!'},
+        },
     }
 ];
 
