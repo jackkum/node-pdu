@@ -72,23 +72,25 @@ Header.IE_CONCAT_16BIT_REF      = 0x08;
  */
 Header.parse = function()
 {
-    var buffer    = new Buffer(PDU.getPduSubstr(6), 'hex'),
-        udhl      = buffer[0],
-        type      = buffer[1],
-        psize     = buffer[2];
-        buffer    = new Buffer(PDU.getPduSubstr((psize - 2) * 2 ), 'hex'); // psize is pointer + segments + current
-    var pointer   = buffer.length === 1 ? buffer[0] : (buffer[0]<<8) | buffer[1];
-        buffer    = new Buffer(PDU.getPduSubstr(4), 'hex');
-    var sergments = buffer[0],
-        current   = buffer[1];
+    var buf = new Buffer(PDU.getPduSubstr(2), 'hex'),
+        ieLen = 0,
+        ies = [];
+
+    /**
+     * NB: this parser does not perform the IE data parsing, it only
+     * splits the header onto separate IE(s) and then create a new Header
+     * object using the extracted IE(s) as an initializer. IE data parsing
+     * (if any) will beb performed later by the Header class constructor.
+     */
+
+    /* Parse IE(s) as TLV */
+    for (var udhl = buf[0]; udhl > 0; udhl -= (2 + ieLen)) {
+        buf = new Buffer(PDU.getPduSubstr(4), 'hex');
+        ieLen = buf[1];
+        ies.push({type: buf[0], dataHex: PDU.getPduSubstr(ieLen * 2)});
+    }
     
-    var self = new Header({
-            'POINTER':  pointer,
-            'SEGMENTS': sergments,
-            'CURRENT':  current
-    });
-    
-    return self;
+    return new Header(ies);
 };
 
 /**
