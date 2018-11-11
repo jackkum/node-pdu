@@ -135,14 +135,14 @@ SCA.prototype.setPhone = function(phone, SC)
         Type   = PDU.getModule('PDU/SCA/Type');
     
     this._phone     = phone;
-    var clear       = phone.replace(/[^a-c0-9\*\#]/gi, '');
     this._isAddress = !SC;
     
     if(this.getType().getType() === Type.TYPE_ALPHANUMERICAL){
-        var tmp = Helper.encode7Bit(clear);
-        this._size    = tmp.shift();
+        var tmp = Helper.encode7Bit(phone);
+        this._size    = Math.ceil(tmp.shift() * 7 / 4); /* septets to semi-octets */
         this._encoded = tmp.shift();
     } else {
+        var clear = phone.replace(/[^a-c0-9\*\#]/gi, '');
         
         // get size
         // service center addres counting by octets OA or DA as length numbers
@@ -215,6 +215,8 @@ SCA.prototype.toString = function()
                 // add to pdu
                 str += b2 + b1;
             }
+        } else {
+            str += this._encoded;
         }
     }
     
