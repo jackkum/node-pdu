@@ -62,6 +62,7 @@ Part.parse = function(data)
         udl      = data.getPdu().getUdl(),
         length   = 0,
         hdrSz    = 0,           /* Header full size: UDHL + UDH */
+        alignBits= 0,
         text     = undefined;
 
     if(alphabet == DCS.ALPHABET_DEFAULT)
@@ -82,7 +83,8 @@ Part.parse = function(data)
         case DCS.ALPHABET_DEFAULT:
             PDU.debug("Helper.decode7Bit(" + hex + ")");
             length = udl - Math.ceil(hdrSz * 8 / 7);    /* Convert octets to septets */
-            text = Helper.decode7Bit(hex, length);
+            alignBits = Math.ceil(hdrSz * 8 / 7) * 7 - hdrSz * 8;
+            text = Helper.decode7Bit(hex, length, alignBits);
             break;
         
         case DCS.ALPHABET_8BIT:

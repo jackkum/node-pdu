@@ -89,9 +89,10 @@ Helper.decode8Bit = function(text)
  * decode message from 7bit
  * @param string $text
  * @param int $inLen
+ * @param int $alignBits
  * @return string
  */
-Helper.decode7Bit = function(text, inLen)
+Helper.decode7Bit = function(text, inLen, alignBits)
 {
     var ret   = [],
         data  = new Buffer(text, "hex"),
@@ -100,6 +101,14 @@ Helper.decode7Bit = function(text, inLen)
         bufLen = 0,         /* Ammount of buffered bits */
         inDone = 0,
         inExt = false;
+
+    /* If we have some leading alignment bits then skip them */
+    if(alignBits && data.length){
+        alignBits = alignBits % 7;
+        buf = data[dataPos++];
+        buf >>= alignBits;
+        bufLen = 8 - alignBits;
+    }
     
     while (true) {
         if(bufLen < 7){

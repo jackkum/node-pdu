@@ -257,6 +257,10 @@ var parserTests = [
         name: 'EMS formatted text #1',
         pduStr: '07919730071111F1400B919746121611F100008111701222322342140A030004100A030606200A030E09400A031C0D80C2379BCC0225E961767ACC0255DDE4B29C9D76974161371934A5CBD3EB321D2D7FD7CF6817',
         expectedResult: {data: {text: 'Bold, Italic, Underline and Strikethrough.'}},
+    }, {
+        name: 'EMS formatted text #2',
+        pduStr: '07919730071111F1400B919746121611F100008111701222822310050A03000410846F3619F476B3F3',
+        expectedResult: {data: {text: 'Bold only'}},
     }
 ];
 
