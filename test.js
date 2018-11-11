@@ -304,10 +304,22 @@ for (let test of parserTests) {
         error = e.message;
     }
 
-    if (verifyResultPdu(logPrefix, msg, test.expectedResult, error, test.expectedError)) {
-        cntOk++;
-        console.log(logPrefix + 'Ok');
+    if (!verifyResultPdu(logPrefix, msg, test.expectedResult, error, test.expectedError))
+        continue;
+
+    if (error == '') {
+        var resPdu = msg.getData().getParts()[0].toString();
+
+        if (test.pduStr != resPdu) {
+            console.log(logPrefix + 'fail: recreation mangles the PDU');
+            console.log(logPrefix + 'origin: ' + test.pduStr);
+            console.log(logPrefix + 'result: ' + resPdu);
+            continue;
+        }
     }
+
+    cntOk++;
+    console.log(logPrefix + 'Ok');
 }
 
 var appendTests = [
