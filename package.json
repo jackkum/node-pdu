@@ -1,7 +1,7 @@
 {
   "name": "node-pdu",
   "version": "1.0.14",
-  "description": "Create a pdu string for send sms",
+  "description": "Creates and parses a SMS PDU strings",
   "main": "index.js",
   "dependencies": {
 	  "sprintf": "~0.1.5"

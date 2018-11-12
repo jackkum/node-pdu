@@ -69,9 +69,11 @@ Data.parse = function(pdu)
  */
 Data.prototype.append = function(pdu)
 {
+    var self = this;
+
     pdu.getParts().forEach(function(part){
-        if( ! this._partExists(part)){
-            this._parts.push(part);
+        if( ! self._partExists(part)){
+            self._parts.push(part);
         }
     });
     
@@ -88,13 +90,13 @@ Data.prototype._partExists = function(part)
 {
     var result = false;
     this._parts.forEach(function(_part){
-        if(part.getHeader().getPointer() !== _part.getHeader().getPointer()){
+        if(part.getHeader().getPointer() !== _part.getHeader().getPointer() ||
+           part.getHeader().getSegments() !== _part.getHeader().getSegments()){
             throw new Error("Part from different message");
         }
         
         if(_part.getHeader().getCurrent() === part.getHeader().getCurrent()){
-            result = false;
-            return false;
+            result = true;
         }
     });
     

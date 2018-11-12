@@ -6,47 +6,74 @@ var PDU     = require('../../pdu'),
 function Header(params)
 {
     /**
-     * 
-     * @var integer
+     * Header Information Elements
+     * Each array element contains at least an IE type and raw IE data in the
+     * form of a hexadecimal string.
+     * @var array
      */
-    this._UDHL     = 6;
-    
+    this._ies = [];
+
     /**
-     *
+     * Index of the concatenation IE
      * @var integer
      */
-    this._TYPE     = 0x08; // 16bit
+    this._concatIeIdx = undefined;
     
-    /**
-     *
-     * @var integer
-     */
-    this._PSIZE    = 4;
-    
-    /**
-     *
-     * @var integer
-     */
-    this._POINTER  = 0;
-    
-    /**
-     *
-     * @var integer
-     */
-    this._SEGMENTS = 1;
-    
-    /**
-     *
-     * @var integer
-     */
-    this._CURRENT  = 1;
-    
-    params = params || {};
-    
-    this._SEGMENTS = params.SEGMENTS || 1;
-    this._CURRENT  = params.CURRENT  || 1;
-    this._POINTER  = params.POINTER  || Math.floor(Math.random() * 0xFFFF);
+    if(Array.isArray(params)){
+        /**
+         * NB: This code can be factored out into a separate method if we have
+         * a usecase for it.
+         */
+        for (var ie of params) {
+            var buf = new Buffer(ie.dataHex, 'hex');
+            var data = undefined;
+
+            /* Parse known IEs (e.g. concatenetion) */
+            switch (ie.type) {
+            case Header.IE_CONCAT_8BIT_REF:
+                this._concatIeIdx = this._ies.length;   /* Preserve IE index */
+                data = {
+                    msgRef: buf[0],
+                    maxMsgNum: buf[1],
+                    msgSeqNo: buf[2]
+                }
+                break;
+            case Header.IE_CONCAT_16BIT_REF:
+                this._concatIeIdx = this._ies.length;   /* Preserve IE index */
+                data = {
+                    msgRef: (buf[0] << 8) | buf[1],
+                    maxMsgNum: buf[2],
+                    msgSeqNo: buf[3]
+                }
+                break;
+            }
+
+            this._ies.push({
+                type: ie.type,
+                dataHex: ie.dataHex,
+                data: data,
+            });
+        }
+    } else if(params){
+        var dataHex = sprintf("%04X%02X%02X",
+                              params.POINTER,
+                              params.SEGMENTS,
+                              params.CURRENT);
+        this._ies.push({
+            type: Header.IE_CONCAT_16BIT_REF,
+            dataHex: dataHex,
+            data: {
+                msgRef: params.POINTER,
+                maxMsgNum: params.SEGMENTS,
+                msgSeqNo: params.CURRENT
+            }
+        });
+        this._concatIeIdx = this._ies.length - 1;
+    }
 };
+
+Header.IE_CONCAT_8BIT_REF       = 0x00;
+Header.IE_CONCAT_16BIT_REF      = 0x08;
 
 /**
  * parse header
@@ -54,26 +81,25 @@ function Header(params)
  */
 Header.parse = function()
 {
-    var buffer    = new Buffer(PDU.getPduSubstr(6), 'hex'),
-        udhl      = buffer[0],
-        type      = buffer[1],
-        psize     = buffer[2];
-        buffer    = new Buffer(PDU.getPduSubstr((psize - 2) * 2 ), 'hex'); // psize is pointer + segments + current
-    var pointer   = buffer.length === 1 ? buffer[0] : (buffer[0]<<8) | buffer[1];
-        buffer    = new Buffer(PDU.getPduSubstr(4), 'hex');
-    var sergments = buffer[0],
-        current   = buffer[1];
+    var buf = new Buffer(PDU.getPduSubstr(2), 'hex'),
+        ieLen = 0,
+        ies = [];
+
+    /**
+     * NB: this parser does not perform the IE data parsing, it only
+     * splits the header onto separate IE(s) and then create a new Header
+     * object using the extracted IE(s) as an initializer. IE data parsing
+     * (if any) will beb performed later by the Header class constructor.
+     */
+
+    /* Parse IE(s) as TLV */
+    for (var udhl = buf[0]; udhl > 0; udhl -= (2 + ieLen)) {
+        buf = new Buffer(PDU.getPduSubstr(4), 'hex');
+        ieLen = buf[1];
+        ies.push({type: buf[0], dataHex: PDU.getPduSubstr(ieLen * 2)});
+    }
     
-    var self = new Header({
-            'UDHL':     udhl,
-            'TYPE':     type,
-            'PSIZE':    psize,
-            'POINTER':  pointer,
-            'SEGMENTS': sergments,
-            'CURRENT':  current
-    });
-    
-    return self;
+    return new Header(ies);
 };
 
 /**
@@ -83,22 +109,24 @@ Header.parse = function()
 Header.prototype.toJSON = function()
 {
     return {
-        'UDHL':     this._UDHL,
-        'TYPE':     this._TYPE,
-        'PSIZE':    this._PSIZE,
-        'POINTER':  this._POINTER,
-        'SEGMENTS': this._SEGMENTS,
-        'CURRENT':  this._CURRENT
+        'POINTER':  this.getPointer(),
+        'SEGMENTS': this.getSegments(),
+        'CURRENT':  this.getCurrent(),
     };
 };
 
 /**
- * get header size
+ * get header size (UDHL value), in octets
  * @return integer
  */
 Header.prototype.getSize = function()
 {
-    return this._UDHL;
+    var udhl = 0;
+
+    for (var ie of this._ies)
+        udhl += 2 + ie.dataHex.length / 2;
+
+    return udhl;
 };
 
 /**
@@ -107,7 +135,8 @@ Header.prototype.getSize = function()
  */
 Header.prototype.getType = function()
 {
-    return this._TYPE;
+    return this._concatIeIdx === undefined ? undefined :
+           this._ies[this._concatIeIdx].type;
 };
 
 /**
@@ -116,7 +145,8 @@ Header.prototype.getType = function()
  */
 Header.prototype.getPointerSize = function()
 {
-    return this._PSIZE;
+    return this._concatIeIdx === undefined ? 0 :
+           this._ies[this._concatIeIdx].dataHex.length / 2;
 };
 
 /**
@@ -125,7 +155,8 @@ Header.prototype.getPointerSize = function()
  */
 Header.prototype.getPointer = function()
 {
-    return this._POINTER;
+    return this._concatIeIdx === undefined ? 0 :
+           this._ies[this._concatIeIdx].data.msgRef;
 };
 
 /**
@@ -134,7 +165,8 @@ Header.prototype.getPointer = function()
  */
 Header.prototype.getSegments = function()
 {
-    return this._SEGMENTS;
+    return this._concatIeIdx === undefined ? 1 :
+           this._ies[this._concatIeIdx].data.maxMsgNum;
 };
 
 /**
@@ -143,7 +175,8 @@ Header.prototype.getSegments = function()
  */
 Header.prototype.getCurrent = function()
 {
-    return this._CURRENT;
+    return this._concatIeIdx === undefined ? 1 :
+           this._ies[this._concatIeIdx].data.msgSeqNo;
 };
 
 /**
@@ -152,15 +185,15 @@ Header.prototype.getCurrent = function()
  */
 Header.prototype.toString = function()
 {
+    var udhl = 0;
     var head = '';
-    head += sprintf("%02X", this._UDHL);
-    head += sprintf("%02X", this._TYPE);
-    head += sprintf("%02X", this._PSIZE);
-    head += sprintf("%04X", this._POINTER);
-    head += sprintf("%02X", this._SEGMENTS);
-    head += sprintf("%02X", this._CURRENT);
+
+    for (var ie of this._ies) {
+        udhl += 2 + ie.dataHex.length / 2;
+        head += sprintf("%02X%02X", ie.type, ie.dataHex.length / 2) + ie.dataHex;
+    }
     
-    return head;
+    return sprintf("%02X", udhl) + head;
 };
 
 module.exports = Header;

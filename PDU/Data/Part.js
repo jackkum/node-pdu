@@ -5,6 +5,8 @@ var PDU     = require('../../pdu'),
     
 function Part(parent, data, size, header)
 {
+    var Header = PDU.getModule('PDU/Data/Header');
+
     /**
      * header message
      * @var \Header
@@ -35,9 +37,9 @@ function Part(parent, data, size, header)
      */
     this._parent = parent;
     
-    // have params for header
-    if(header){
-        var Header = PDU.getModule('PDU/Data/Header');
+    if(header instanceof Header){   // have header
+        this._header = header;
+    } else if(header){              // have params for header
         // create header
         this._header = new Header(header);
     }
@@ -57,20 +59,32 @@ Part.parse = function(data)
     
     var alphabet = data.getPdu().getDcs().getTextAlphabet(),
         header   = null,
-        length   = data.getPdu().getUdl() * (alphabet === DCS.ALPHABET_UCS2 ? 4 : 2),
+        udl      = data.getPdu().getUdl(),
+        length   = 0,
+        hdrSz    = 0,           /* Header full size: UDHL + UDH */
+        alignBits= 0,
         text     = undefined;
+
+    if(alphabet == DCS.ALPHABET_DEFAULT)
+        length = Math.ceil(udl * 7 / 8);    /* Convert septets to octets */
+    else
+        length = udl;                       /* Length already in octets */
     
     if(data.getPdu().getType().getUdhi()){
         PDU.debug("Header.parse()");
         header = Header.parse();
+        hdrSz = 1 + header.getSize();   /* UDHL field length + UDH length */
+        length -= hdrSz;
     }
     
-    var hex = PDU.getPduSubstr(length);
+    var hex = PDU.getPduSubstr(length * 2); /* Extract Octets x2 chars */
     
     switch(alphabet){
         case DCS.ALPHABET_DEFAULT:
             PDU.debug("Helper.decode7Bit(" + hex + ")");
-            text = Helper.decode7Bit(hex);
+            length = udl - Math.ceil(hdrSz * 8 / 7);    /* Convert octets to septets */
+            alignBits = Math.ceil(hdrSz * 8 / 7) * 7 - hdrSz * 8;
+            text = Helper.decode7Bit(hex, length, alignBits);
             break;
         
         case DCS.ALPHABET_8BIT:
@@ -87,12 +101,11 @@ Part.parse = function(data)
             throw new Error("Unknown alpabet");
     }
     
-    var size = text.length,
-        self = new Part(data, hex, size, header);
+    var self = new Part(data, hex, udl, header);
     
     self._text = text;
     
-    return [text, size, self];
+    return [text, udl, self];
 };
 
 /**
