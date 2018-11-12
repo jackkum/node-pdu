@@ -2,6 +2,8 @@
 
 PDU parser and generator for node
 
+Project is looking for maintainer
+
 ## How to install
 
 ```bash
