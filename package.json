@@ -1,6 +1,6 @@
 {
   "name": "node-pdu",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Creates and parses a SMS PDU strings",
   "main": "index.js",
   "dependencies": {
