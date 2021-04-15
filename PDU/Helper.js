@@ -129,12 +129,29 @@ Helper.decode7Bit = function(text, inLen, alignBits)
         if(digit % 128 == 27){
             inExt = true;
         } else {
-            if(inExt){
-                ret.push(Helper.EXTENDED_TABLE.charCodeAt(digit));
-                inExt = false;
-            } else {
-                ret.push(Helper.ALPHABET_7BIT.charCodeAt(digit));
-            }
+          var c = Helper.ALPHABET_7BIT.charCodeAt(digit);
+          if (c < 0x80) {
+            ret.push(c);
+          } else if (c < 0x800) {
+            ret.push(0xC0 | (c >> 6), 0x80 | (c & 0x3F));
+          }  else if (
+              ((c & 0xFC00) == 0xD800) && (digit + 1) < Helper.EXTENDED_TABLE.length &&
+              ((Helper.EXTENDED_TABLE.charCodeAt(digit + 1) & 0xFC00) == 0xDC00)) {
+            // Surrogate Pair
+            c = 0x10000 + ((c & 0x03FF) << 10) + (str.charCodeAt(++digit) & 0x03FF);
+            ret.push(
+              0xF0 | (c >> 18),
+              0x80 | ((c >> 12) & 0x3F),
+              0x80 | ((c >> 6) & 0x3F),
+              0x80 | (c & 0x3F)
+            );
+          } else {
+            ret.push(
+              0xE0 | (c >> 12),
+              0x80 | ((c >> 6) & 0x3F),
+              0x80 | (c & 0x3F)
+            );
+          }
         }
 
         /* Do we process all input data */
