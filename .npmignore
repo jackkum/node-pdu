@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+src
+test
+testTS
+.editorconfig
+.eslintrc.js
+.gitignore
+.npmignore
+.prettierrc.js
+tsconfig.json
+yarn.lock
