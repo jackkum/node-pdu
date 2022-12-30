@@ -67,7 +67,7 @@ export class Helper {
 			}
 
 			// Fetch next septet from the FIFO buffer
-			const digit = buf & 0x7f;
+			let digit = buf & 0x7f;
 			buf >>= 7;
 			bufLen -= 7;
 			inDone++;
@@ -75,11 +75,29 @@ export class Helper {
 			if (digit % 128 === 27) {
 				inExt = true;
 			} else {
+				let c;
+
 				if (inExt) {
-					ret.push(Helper.EXTENDED_TABLE.charCodeAt(digit));
+					c = Helper.EXTENDED_TABLE.charCodeAt(digit);
 					inExt = false;
 				} else {
-					ret.push(Helper.ALPHABET_7BIT.charCodeAt(digit));
+					c = Helper.ALPHABET_7BIT.charCodeAt(digit);
+				}
+
+				if (c < 0x80) {
+					ret.push(c);
+				} else if (c < 0x800) {
+					ret.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
+				} else if (
+					(c & 0xfc00) === 0xd800 &&
+					digit + 1 < Helper.EXTENDED_TABLE.length &&
+					(Helper.EXTENDED_TABLE.charCodeAt(digit + 1) & 0xfc00) === 0xdc00
+				) {
+					// Surrogate Pair
+					c = 0x10000 + ((c & 0x03ff) << 10) + (Helper.EXTENDED_TABLE.charCodeAt(++digit) & 0x03ff);
+					ret.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 0x3f), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+				} else {
+					ret.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
 				}
 			}
 
