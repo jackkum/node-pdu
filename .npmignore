@@ -1,8 +1,8 @@
 .git
 .github
+docs
 node_modules
 src
-test
 testTS
 .editorconfig
 .eslintrc.js
@@ -10,4 +10,5 @@ testTS
 .npmignore
 .prettierrc.js
 tsconfig.json
+typedoc.css
 yarn.lock
