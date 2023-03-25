@@ -2,6 +2,11 @@ pre {
 	border-radius: 0.5em;
 }
 
+hr {
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
 code,
 pre {
 	border: none;
@@ -39,4 +44,12 @@ pre {
 
 .tsd-description .tsd-signatures .tsd-signature {
 	border-radius: 0.5em;
+}
+
+/*
+ * Error in the display "Index-Content" fixed
+ */
+
+.tsd-index-section {
+	display: block !important;
 }
