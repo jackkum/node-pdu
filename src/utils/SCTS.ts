@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { Helper } from './Helper';
 
 /*
@@ -22,7 +21,11 @@ export class SCTS {
 		const tzAbs = Math.floor(Math.abs(this.tzOff) / 15); // To quarters of an hour
 		const x = Math.floor(tzAbs / 10) * 16 + (tzAbs % 10) + (this.tzOff < 0 ? 0x80 : 0x00);
 
-		return moment.unix(this.time).utcOffset(this.tzOff).format('YYMMDDHHmmss') + Helper.toStringHex(x);
+		return this.getDateWithOffset().toISOString().replace(/[-T:]/g, '').slice(2, 14) + Helper.toStringHex(x);
+	}
+
+	private getDateWithOffset() {
+		return new Date(this.time * 1000 + this.tzOff * 60 * 1000);
 	}
 
 	/*
@@ -30,7 +33,15 @@ export class SCTS {
 	 */
 
 	getIsoString() {
-		return moment.unix(this.time).utcOffset(this.tzOff).format('YYYY-MM-DDTHH:mm:ssZ');
+		const datetime = this.getDateWithOffset()
+			.toISOString()
+			.replace(/.\d{3}Z$/, '');
+
+		const offset = Math.abs(this.tzOff / 60)
+			.toString()
+			.padStart(2, '0');
+
+		return datetime + (this.tzOff > 0 ? '+' : '-') + offset + ':00';
 	}
 
 	toString() {

@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { SCTS } from '../../utils/SCTS';
 import { GetSubstr } from '../index';
 
@@ -35,14 +34,24 @@ export default function parseSCTS(getPduSubstr: GetSubstr) {
 	}
 
 	// Build ISO8601 datetime
-	const isoTime = moment()
-		.year(params[0] > 70 ? 1900 + params[0] : 2000 + params[0])
-		.month(params[1] - 1)
-		.date(params[2])
-		.hour(params[3])
-		.minute(params[4])
-		.second(params[5])
-		.utcOffset(tzOff, true);
+	const isoTime = new Date(
+		Date.UTC(
+			// Year
+			params[0] > 70 ? 1900 + params[0] : 2000 + params[0],
+			// Month
+			params[1] - 1,
+			// Day
+			params[2],
+			// Hour
+			params[3],
+			// Minute
+			params[4],
+			// Secound
+			params[5]
+		)
+	);
 
-	return new SCTS(isoTime.toDate(), tzOff);
+	isoTime.setUTCMinutes(isoTime.getUTCMinutes() - tzOff);
+
+	return new SCTS(isoTime, tzOff);
 }

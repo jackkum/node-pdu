@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { Data } from './utils/Data/Data';
 import { Helper } from './utils/Helper';
 import { PDU, PDUOptions } from './utils/PDU';
@@ -66,7 +65,8 @@ export class Deliver extends PDU {
 	 */
 
 	private getDateTime() {
-		return moment().add(10, 'days').toDate();
+		// Create Date in the increment of 10 days
+		return new Date(Date.now() + 864000000);
 	}
 
 	private findData(data: string | Data) {
