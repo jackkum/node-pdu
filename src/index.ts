@@ -7,4 +7,4 @@ export { Report, ReportOptions } from './Report';
 export { Submit, SubmitOptions } from './Submit';
 
 // export the utils
-export * as utils from './utils/export';
+export * as utils from './utils';
