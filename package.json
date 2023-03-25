@@ -24,11 +24,12 @@
 	},
 	"scripts": {
 		"build": "yarn build:lib && yarn build:docs",
-		"build:test": "tsc ./testTS/index.ts --outDir test --skipLibCheck",
+		"build:test": "tsc testTS/index.ts --outDir test --skipLibCheck",
 		"build:lib": "tsc",
-		"build:docs": "typedoc --entryPoints src/index.ts --out docs --excludePrivate --customCss ./typedoc.css",
+		"build:docs": "typedoc --entryPoints src/index.ts --out docs --excludePrivate --customCss typedoc.css",
 		"lint": "eslint src --ext .ts",
-		"prepack": "yarn build:lib"
+		"prepack": "yarn build:lib",
+		"test": "yarn build:lib && yarn build:test && node test/index.js"
 	},
 	"keywords": [
 		"pdu",

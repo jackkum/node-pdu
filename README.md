@@ -50,7 +50,11 @@ Click [here](https://jackkum.github.io/node-pdu/)
 
 A small script allows you to scan the library for significant errors.
 
-[Read more](./TestScript.md)
+Clone the repository, [install yarn](https://classic.yarnpkg.com/lang/en/docs/install/), download the dependencies and run:
+
+```sh
+yarn test
+```
 
 ---
 
