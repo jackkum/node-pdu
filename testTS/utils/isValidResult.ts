@@ -1,3 +1,4 @@
+import { SCA, SCAType } from '../../dist/utils/export';
 import { pdu } from '../index';
 
 export interface Check {
@@ -39,24 +40,8 @@ export function isValidResult(c: Check, pdu0: pdu.Deliver | pdu.Report | pdu.Sub
 		}
 	}
 
-	if (c.address !== undefined) {
-		if (!pdu0.address.isAddress) {
-			// prettier-ignore
-			return ('		.address.isAddress is wrong!\n' +
-					'			Expecting:\n' +
-					`			${true}\n` +
-					'			Got:\n' +
-					`			${pdu0.address.isAddress}`);
-		}
-
-		if (pdu0.address.phone !== c.address) {
-			// prettier-ignore
-			return ('		.address.phone is wrong!\n' +
-					'			Expecting:\n' +
-					`			${c.address}\n` +
-					'			Got:\n' +
-					`			${pdu0.address.phone}`);
-		}
+	if (c.address !== undefined && isValidAddress(pdu0.address, c.address) !== true) {
+		return isValidAddress(pdu0.address, c.address);
 	}
 
 	if (c.dcs !== undefined) {
@@ -140,6 +125,70 @@ export function isValidResult(c: Check, pdu0: pdu.Deliver | pdu.Report | pdu.Sub
 					'			Got:\n' +
 					`			${pdu0.data.size}`);
 		}
+	}
+
+	return true;
+}
+
+function isValidAddress(got: SCA, expecting: string) {
+	/**
+	 * check
+	 */
+
+	if (!got.isAddress) {
+		// prettier-ignore
+		return ('		.address.isAddress is wrong!\n' +
+				'			Expecting:\n' +
+				`			${true}\n` +
+				'			Got:\n' +
+				`			${got.isAddress}`);
+	}
+
+	/**
+	 * Check for internatinal number
+	 */
+
+	if (expecting.startsWith('00') || expecting.startsWith('+')) {
+		if (got.type.type !== SCAType.TYPE_INTERNATIONAL) {
+			// prettier-ignore
+			return ('		.serviceCenterAddress.type.type is wrong!\n' +
+					'			Expecting:\n' +
+					`			${SCAType.TYPE_INTERNATIONAL}\n` +
+					'			Got:\n' +
+					`			${got.type.type}`);
+		}
+
+		if (expecting.startsWith('+')) {
+			expecting = expecting.substring(1);
+		}
+
+		if (expecting.startsWith('00')) {
+			expecting = expecting.substring(2);
+		}
+
+		if (got.phone !== expecting) {
+			// prettier-ignore
+			return ('		.serviceCenterAddress.phone is wrong!\n' +
+					'			Expecting:\n' +
+					`			+${expecting} or 00${expecting}\n` +
+					'			Got:\n' +
+					`			${got.phone}`);
+		}
+
+		return true;
+	}
+
+	/**
+	 * National or alphanumerical number
+	 */
+
+	if (got.phone !== expecting) {
+		// prettier-ignore
+		return ('		.serviceCenterAddress.phone is wrong!\n' +
+				'			Expecting:\n' +
+				`			${expecting}\n` +
+				'			Got:\n' +
+				`			${got.phone}`);
 	}
 
 	return true;

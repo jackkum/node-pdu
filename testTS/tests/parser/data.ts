@@ -53,6 +53,36 @@ export const data: Data[] = [
 		}
 	},
 	{
+		name: 'International phone number #1',
+		pduStr: '000100039199F9000005C8329BFD06',
+		expectedResult: {
+			address: '+999',
+			data: {
+				text: 'Hello'
+			}
+		}
+	},
+	{
+		name: 'International phone number #2',
+		pduStr: '000100039199F9000005C8329BFD06',
+		expectedResult: {
+			address: '00999',
+			data: {
+				text: 'Hello'
+			}
+		}
+	},
+	{
+		name: 'Non-International phone number',
+		pduStr: '000100038199F9000005C8329BFD06',
+		expectedResult: {
+			address: '999',
+			data: {
+				text: 'Hello'
+			}
+		}
+	},
+	{
 		name: 'Alphanumeric OA',
 		pduStr: '07911326060032F0000DD0D432DBFC96D30100001121313121114012D7327BFC6E9741F437885A669BDF723A',
 		expectedResult: {
