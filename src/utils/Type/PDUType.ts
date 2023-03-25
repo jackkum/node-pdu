@@ -9,6 +9,8 @@ export interface TypeParams {
 }
 
 export abstract class PDUType {
+	abstract messageTypeIndicator: number;
+
 	static readonly SMS_SUBMIT = 0x01;
 	static readonly SMS_DELIVER = 0x00;
 	static readonly SMS_REPORT = 0x02;
@@ -19,11 +21,10 @@ export abstract class PDUType {
 	static readonly VPF_ABSOLUTE = 0x03;
 
 	private readonly replyPath: number;
+	private readonly rejectDuplicates: number;
 	private _userDataHeader: number;
 	private _statusReportRequest: number;
 	private _validityPeriodFormat: number;
-	private readonly rejectDuplicates: number;
-	abstract messageTypeIndicator: number;
 
 	constructor(params: TypeParams) {
 		this.replyPath = params.replyPath;

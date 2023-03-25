@@ -10,7 +10,7 @@ export class SCA {
 
 	private _isAddress: boolean;
 	private _size = 0x00;
-	private encoded = '';
+	private _encoded = '';
 	private _phone: string | null = null;
 
 	constructor(isAddress = false, options: SCAOptions = {}) {
@@ -30,6 +30,10 @@ export class SCA {
 		return this._size;
 	}
 
+	get encoded() {
+		return this._encoded;
+	}
+
 	get phone() {
 		return this._phone;
 	}
@@ -46,7 +50,7 @@ export class SCA {
 			const tmp = Helper.encode7Bit(phone);
 
 			this._size = Math.ceil((tmp.length * 7) / 4); // septets to semi-octets
-			this.encoded = tmp.result;
+			this._encoded = tmp.result;
 
 			return this;
 		}
@@ -57,13 +61,17 @@ export class SCA {
 		// service center address counting by octets OA or DA as length numbers
 		this._size = SC ? 1 + Math.ceil(clear.length / 2) : clear.length;
 
-		this.encoded = clear
+		this._encoded = clear
 			.split('')
 			.map((s) => SCA.mapFilterEncode(s))
 			.join('');
 
 		return this;
 	}
+
+	/*
+	 * private functions
+	 */
 
 	private detectScaType(phone: string) {
 		const phoneSpaceless = phone.replace(/^\s+|\s+$/g, '');

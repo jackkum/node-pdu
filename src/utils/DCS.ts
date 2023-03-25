@@ -41,7 +41,7 @@ export class DCS {
 
 	private _encodeGroup: number;
 	private _dataEncoding: number;
-	compressedText: boolean;
+	private _compressedText: boolean;
 	private _textAlphabet: number;
 	private _useMessageClass: boolean;
 	private _classMessage: number;
@@ -55,7 +55,7 @@ export class DCS {
 	constructor(options: DCSOptions = {}) {
 		this._encodeGroup = options.encodeGroup || 0x00;
 		this._dataEncoding = options.dataEncoding || 0x00;
-		this.compressedText = options.compressedText || false;
+		this._compressedText = options.compressedText || false;
 		this._textAlphabet = options.textAlphabet || DCS.ALPHABET_DEFAULT;
 		this._useMessageClass = options.useMessageClass || false;
 		this._classMessage = options.classMessage || DCS.CLASS_NONE;
@@ -79,20 +79,39 @@ export class DCS {
 		return this._dataEncoding;
 	}
 
+	get compressedText() {
+		return this._compressedText;
+	}
+
+	get dataCodingAndMessageClass() {
+		return this._dataCodingAndMessageClass;
+	}
+
 	get discardMessage() {
 		return this._discardMessage;
+	}
+
+	setDiscardMessage() {
+		this._discardMessage = true;
+		return this;
 	}
 
 	get storeMessage() {
 		return this._storeMessage;
 	}
 
+	setStoreMessage() {
+		this._storeMessage = true;
+		return this;
+	}
+
 	get storeMessageUCS2() {
 		return this._storeMessageUCS2;
 	}
 
-	get dataCodingAndMessageClass() {
-		return this._dataCodingAndMessageClass;
+	setStoreMessageUCS2() {
+		this._storeMessageUCS2 = true;
+		return this;
 	}
 
 	get messageIndication() {
@@ -131,8 +150,12 @@ export class DCS {
 		return this;
 	}
 
+	get textTextCompressed() {
+		return this._compressedText;
+	}
+
 	setTextCompressed(compressed = true) {
-		this.compressedText = compressed;
+		this._compressedText = compressed;
 		return this;
 	}
 
@@ -205,21 +228,6 @@ export class DCS {
 	 * public functions
 	 */
 
-	setStoreMessage() {
-		this._storeMessage = true;
-		return this;
-	}
-
-	setStoreMessageUCS2() {
-		this._storeMessageUCS2 = true;
-		return this;
-	}
-
-	setDiscardMessage() {
-		this._discardMessage = true;
-		return this;
-	}
-
 	getValue() {
 		this._encodeGroup = 0x00;
 
@@ -232,7 +240,7 @@ export class DCS {
 		}
 
 		// set is compressed bit
-		if (this.compressedText) {
+		if (this._compressedText) {
 			this._encodeGroup |= 1 << 1;
 		}
 

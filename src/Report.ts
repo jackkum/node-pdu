@@ -8,11 +8,10 @@ export interface ReportOptions extends PDUOptions {
 }
 
 export class Report extends PDU {
-	type: ReportType;
-
-	reference: number;
-	dateTime: SCTS;
-	discharge: SCTS;
+	private _type: ReportType;
+	private _reference: number;
+	private _dateTime: SCTS;
+	private _discharge: SCTS;
 
 	/*
 	 * report status
@@ -42,44 +41,64 @@ export class Report extends PDU {
 	 * 0x64 Quality of service not available
 	 * 0x65 Error in SME
 	 */
-	status: number;
+	private _status: number;
 
 	constructor(address: string | SCA, reference: number, dateTime: SCTS, discharge: SCTS, status: number, options: ReportOptions = {}) {
 		super(address, options);
 
-		this.type = options.type || new ReportType();
-		this.reference = reference;
-		this.dateTime = dateTime;
-		this.discharge = discharge;
-		this.status = status;
+		this._type = options.type || new ReportType();
+		this._reference = reference;
+		this._dateTime = dateTime;
+		this._discharge = discharge;
+		this._status = status;
 	}
 
 	/*
-	 * setter
+	 * getter & setter
 	 */
 
+	get type() {
+		return this._type;
+	}
+
 	setType(type: ReportType) {
-		this.type = type;
+		this._type = type;
 		return this;
+	}
+
+	get reference() {
+		return this._reference;
 	}
 
 	setReference(reference: number) {
-		this.reference = reference;
+		this._reference = reference;
 		return this;
+	}
+
+	get dateTime() {
+		return this._dateTime;
 	}
 
 	setDateTime(dateTime: SCTS) {
-		this.dateTime = dateTime;
+		this._dateTime = dateTime;
 		return this;
+	}
+
+	get discharge() {
+		return this._discharge;
 	}
 
 	setDischarge(discharge: SCTS) {
-		this.discharge = discharge;
+		this._discharge = discharge;
 		return this;
 	}
 
+	get status() {
+		return this._status;
+	}
+
 	setStatus(status: number) {
-		this.status = status;
+		this._status = status;
 		return this;
 	}
 }

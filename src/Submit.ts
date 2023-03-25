@@ -12,52 +12,67 @@ export interface SubmitOptions extends PDUOptions {
 }
 
 export class Submit extends PDU {
-	type: SubmitType;
-
-	data: Data;
-	messageReference: number;
-	validityPeriod: VP;
+	private _type: SubmitType;
+	private _data: Data;
+	private _messageReference: number;
+	private _validityPeriod: VP;
 
 	constructor(address: string | SCA, data: string | Data, options: SubmitOptions = {}) {
 		super(address, options);
 
-		this.type = options.type || new SubmitType();
-		this.data = this.findData(data);
-		this.messageReference = options.messageReference || 0x00;
-		this.validityPeriod = options.validityPeriod || new VP();
+		this._type = options.type || new SubmitType();
+		this._data = this.findData(data);
+		this._messageReference = options.messageReference || 0x00;
+		this._validityPeriod = options.validityPeriod || new VP();
 	}
 
 	/*
-	 * setter
+	 * getter & setter
 	 */
 
+	get type() {
+		return this._type;
+	}
+
+	get data() {
+		return this._data;
+	}
+
+	get messageReference() {
+		return this._messageReference;
+	}
+
+	get validityPeriod() {
+		return this._validityPeriod;
+	}
+
 	setType(type: SubmitType) {
-		this.type = type;
+		this._type = type;
 		return this;
 	}
 
 	setData(data: string | Data) {
-		this.data = this.findData(data);
+		this._data = this.findData(data);
 		return this;
 	}
 
 	setMessageReference(messageReference: number) {
-		this.messageReference = messageReference;
+		this._messageReference = messageReference;
 		return this;
 	}
 
 	setValidityPeriod(value: VP | string | number) {
 		if (value instanceof VP) {
-			this.validityPeriod = value;
+			this._validityPeriod = value;
 			return this;
 		}
 
-		this.validityPeriod = new VP();
+		this._validityPeriod = new VP();
 
 		if (typeof value === 'string') {
-			this.validityPeriod.setDateTime(value);
+			this._validityPeriod.setDateTime(value);
 		} else {
-			this.validityPeriod.setInterval(value);
+			this._validityPeriod.setInterval(value);
 		}
 
 		return this;
@@ -80,7 +95,7 @@ export class Submit extends PDU {
 	 */
 
 	getParts() {
-		return this.data.parts;
+		return this._data.parts;
 	}
 
 	toString() {
@@ -95,12 +110,12 @@ export class Submit extends PDU {
 		let str = '';
 
 		str += this.serviceCenterAddress.toString();
-		str += this.type.toString();
-		str += Helper.toStringHex(this.messageReference);
+		str += this._type.toString();
+		str += Helper.toStringHex(this._messageReference);
 		str += this.address.toString();
 		str += Helper.toStringHex(this.protocolIdentifier.getValue());
 		str += this.dataCodingScheme.toString();
-		str += this.validityPeriod.toString(this);
+		str += this._validityPeriod.toString(this);
 
 		return str;
 	}

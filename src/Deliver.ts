@@ -12,40 +12,51 @@ export interface DeliverOptions extends PDUOptions {
 }
 
 export class Deliver extends PDU {
-	type: DeliverType;
-
-	data: Data;
-	serviceCenterTimeStamp: SCTS;
+	private _type: DeliverType;
+	private _data: Data;
+	private _serviceCenterTimeStamp: SCTS;
 
 	constructor(address: string | SCA, data: string | Data, options: DeliverOptions = {}) {
 		super(address, options);
 
-		this.type = options.type || new DeliverType();
-		this.data = this.findData(data);
-		this.serviceCenterTimeStamp = options.serviceCenterTimeStamp || new SCTS(this.getDateTime());
+		this._type = options.type || new DeliverType();
+		this._data = this.findData(data);
+		this._serviceCenterTimeStamp = options.serviceCenterTimeStamp || new SCTS(this.getDateTime());
 	}
 
 	/*
-	 * setter
+	 * getter & setter
 	 */
 
+	get type() {
+		return this._type;
+	}
+
 	setType(type: DeliverType) {
-		this.type = type;
+		this._type = type;
 		return this;
 	}
 
+	get data() {
+		return this._data;
+	}
+
 	setData(data: string | Data) {
-		this.data = this.findData(data);
+		this._data = this.findData(data);
 		return this;
+	}
+
+	get serviceCenterTimeStamp() {
+		return this._serviceCenterTimeStamp;
 	}
 
 	setServiceCenterTimeStamp(time: Date | SCTS = this.getDateTime()) {
 		if (time instanceof SCTS) {
-			this.serviceCenterTimeStamp = time;
+			this._serviceCenterTimeStamp = time;
 			return this;
 		}
 
-		this.serviceCenterTimeStamp = new SCTS(time);
+		this._serviceCenterTimeStamp = new SCTS(time);
 
 		return this;
 	}
@@ -71,7 +82,7 @@ export class Deliver extends PDU {
 	 */
 
 	getParts() {
-		return this.data.parts;
+		return this._data.parts;
 	}
 
 	toString() {
@@ -82,11 +93,11 @@ export class Deliver extends PDU {
 		let str = '';
 
 		str += this.serviceCenterAddress.toString();
-		str += this.type.toString();
+		str += this._type.toString();
 		str += this.address.toString();
 		str += Helper.toStringHex(this.protocolIdentifier.getValue());
 		str += this.dataCodingScheme.toString();
-		str += this.serviceCenterTimeStamp.toString();
+		str += this._serviceCenterTimeStamp.toString();
 
 		return str;
 	}

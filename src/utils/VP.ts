@@ -24,7 +24,7 @@ export class VP {
 	}
 
 	/*
-	 * setter
+	 * getter & setter
 	 */
 
 	get dateTime() {

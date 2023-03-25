@@ -31,6 +31,10 @@ export class Data {
 	 * getter & setter
 	 */
 
+	get data() {
+		return this._data;
+	}
+
 	get size() {
 		return this._size;
 	}
@@ -41,10 +45,6 @@ export class Data {
 
 	get isUnicode() {
 		return this._isUnicode;
-	}
-
-	get data() {
-		return this._data;
 	}
 
 	setData(data: string, pdu: Deliver | Submit) {
