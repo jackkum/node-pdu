@@ -46,7 +46,7 @@ export abstract class PDU {
 			return this;
 		}
 
-		this.serviceCenterAddress.setPhone(address, true);
+		this.serviceCenterAddress.setPhone(address, false, true);
 		return this;
 	}
 

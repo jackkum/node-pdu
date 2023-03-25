@@ -9,52 +9,43 @@ export default function parseSCA(getPduSubstr: GetSubstr, isAddress: boolean) {
 	let size = buffer[0];
 	let octets;
 
-	if (size) {
-		// if is OA or DA then the size in semi-octets
-		if (isAddress) {
-			octets = Math.ceil(size / 2); // to full octets
-			// else size in octets
-		} else {
-			size--;
-			octets = size;
-			size *= 2; // to semi-octets for future usage
-		}
-
-		const buffer2 = Buffer.from(getPduSubstr(2), 'hex');
-		sca.type = new SCAType(buffer2[0]);
-
-		const hex = getPduSubstr(octets * 2);
-
-		switch (sca.type.type) {
-			case SCAType.TYPE_UNKNOWN:
-			case SCAType.TYPE_INTERNATIONAL:
-			case SCAType.TYPE_ACCEPTER_INTO_NET:
-			case SCAType.TYPE_SUBSCRIBER_NET:
-			case SCAType.TYPE_TRIMMED:
-				// Detect padding char
-				if (!isAddress && hex.charAt(size - 2) === 'F') {
-					size--;
-				}
-
-				sca.setPhone(
-					(hex.match(/.{1,2}/g) || [])
-						.map((b) => {
-							return SCA.mapFilterDecode(b).split('').reverse().join('');
-						})
-						.join('')
-						.slice(0, size),
-					!isAddress
-				);
-
-				break;
-
-			case SCAType.TYPE_ALPHANUMERICAL:
-				size = Math.floor((size * 4) / 7); // semi-octets to septets
-				sca.setPhone(Helper.decode7Bit(hex, size), !isAddress);
-
-				break;
-		}
+	if (!size) {
+		return sca;
 	}
 
-	return sca;
+	// if is OA or DA then the size in semi-octets
+	if (isAddress) {
+		octets = Math.ceil(size / 2); // to full octets
+		// else size in octets
+	} else {
+		size--;
+		octets = size;
+		size *= 2; // to semi-octets for future usage
+	}
+
+	const bufferScaType = Buffer.from(getPduSubstr(2), 'hex');
+	const type = new SCAType(bufferScaType[0]);
+	const hex = getPduSubstr(octets * 2);
+
+	sca.type.setType(type.type);
+	sca.type.setPlan(type.plan);
+
+	if (sca.type.type === SCAType.TYPE_ALPHANUMERICAL) {
+		size = Math.floor((size * 4) / 7); // semi-octets to septets
+		sca.setPhone(Helper.decode7Bit(hex, size), false, !isAddress);
+
+		return sca;
+	}
+
+	// Detect padding char
+	if (!isAddress && hex.charAt(size - 2) === 'F') {
+		size--;
+	}
+
+	const phone = (hex.match(/.{1,2}/g) || [])
+		.map((b) => SCA.mapFilterDecode(b).split('').reverse().join(''))
+		.join('')
+		.slice(0, size);
+
+	return sca.setPhone(phone, false, !isAddress);
 }

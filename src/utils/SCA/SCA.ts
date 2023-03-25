@@ -34,9 +34,13 @@ export class SCA {
 		return this._phone;
 	}
 
-	setPhone(phone: string, SC = false) {
-		this._phone = phone;
+	setPhone(phone: string, detectType = true, SC = false) {
+		this._phone = phone.trim();
 		this._isAddress = !SC;
+
+		if (this._isAddress && detectType) {
+			this.detectScaType(this._phone);
+		}
 
 		if (this.type.type === SCAType.TYPE_ALPHANUMERICAL) {
 			const tmp = Helper.encode7Bit(phone);
@@ -47,20 +51,42 @@ export class SCA {
 			return this;
 		}
 
-		const clear = phone.replace(/[^a-c0-9*#]/gi, '');
+		const clear = this._phone.replace(/[^a-c0-9*#]/gi, '');
 
 		// get size
-		// service center addres counting by octets OA or DA as length numbers
+		// service center address counting by octets OA or DA as length numbers
 		this._size = SC ? 1 + Math.ceil(clear.length / 2) : clear.length;
 
 		this.encoded = clear
 			.split('')
-			.map((s) => {
-				return SCA.mapFilterEncode(s);
-			})
+			.map((s) => SCA.mapFilterEncode(s))
 			.join('');
 
 		return this;
+	}
+
+	private detectScaType(phone: string) {
+		const phoneSpaceless = phone.replace(/^\s+|\s+$/g, '');
+
+		if (/\+\d+$/.test(phoneSpaceless)) {
+			this._phone = phoneSpaceless.substring(1);
+			this.type.setType(SCAType.TYPE_INTERNATIONAL);
+			return;
+		}
+
+		if (/00\d+$/.test(phoneSpaceless)) {
+			this._phone = phoneSpaceless.substring(2);
+			this.type.setType(SCAType.TYPE_INTERNATIONAL);
+			return;
+		}
+
+		if (/\d+$/.test(phoneSpaceless)) {
+			this._phone = phoneSpaceless;
+			this.type.setType(SCAType.TYPE_UNKNOWN);
+			return;
+		}
+
+		this.type.setType(SCAType.TYPE_ALPHANUMERICAL);
 	}
 
 	/*
