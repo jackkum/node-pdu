@@ -100,9 +100,7 @@ export class Submit extends PDU {
 
 	toString() {
 		return this.getParts()
-			.map((part) => {
-				return part.toString(this);
-			})
+			.map((part) => part.toString(this))
 			.join('\n');
 	}
 

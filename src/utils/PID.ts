@@ -15,12 +15,12 @@ export class PID {
 	static readonly PID_SPECIFIC = 0x03; // Assigns bits 0-5 for SC specific use
 
 	static readonly TYPE_IMPLICIT = 0x00; // Implicit
-	static readonly TYPE_TELEX = 0x01; // telex (or teletex reduced to telex format)
-	static readonly TYPE_TELEFAX = 0x02; // group 3 telefax
-	static readonly TYPE_VOICE = 0x04; // voice telephone (i.e. conversion to speech)
+	static readonly TYPE_TELEX = 0x01; // Telex (or teletex reduced to telex format)
+	static readonly TYPE_TELEFAX = 0x02; // Group 3 telefax
+	static readonly TYPE_VOICE = 0x04; // Voice telephone (i.e. conversion to speech)
 	static readonly TYPE_ERMES = 0x05; // ERMES (European Radio Messaging System)
 	static readonly TYPE_NPS = 0x06; // National Paging system (known to the SC
-	static readonly TYPE_X_400 = 0x11; // any public X.400-based message handling system
+	static readonly TYPE_X_400 = 0x11; // Any public X.400-based message handling system
 	static readonly TYPE_IEM = 0x12; // Internet Electronic Mail
 
 	private _pid: number;

@@ -34,10 +34,6 @@ export class SCTS {
 	}
 
 	toString() {
-		return (this.getDateTime().match(/.{1,2}/g) || [])
-			.map((s) => {
-				return s.split('').reverse().join('');
-			})
-			.join('');
+		return (this.getDateTime().match(/.{1,2}/g) || []).map((s) => s.split('').reverse().join('')).join('');
 	}
 }

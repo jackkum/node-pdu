@@ -32,9 +32,7 @@ export default function parseSCA(getPduSubstr: GetSubstr, isAddress: boolean) {
 
 	if (sca.type.type === SCAType.TYPE_ALPHANUMERICAL) {
 		size = Math.floor((size * 4) / 7); // semi-octets to septets
-		sca.setPhone(Helper.decode7Bit(hex, size), false, !isAddress);
-
-		return sca;
+		return sca.setPhone(Helper.decode7Bit(hex, size), false, !isAddress);
 	}
 
 	// Detect padding char
