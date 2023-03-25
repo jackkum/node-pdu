@@ -39,7 +39,7 @@ export default (): testFuncResult => {
 
 			if (resPdu !== test.pduStr) {
 				console.log(clr(TxtColor.red, `	#${total} ${test.name}`), clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'recreation failed!'));
-				console.log(clr(TxtColor.red, `		Origin:\n		${test.pduStr}		Result:\n		${resPdu}`));
+				console.log(clr(TxtColor.red, `		Origin:\n		${test.pduStr}\n		Result:\n		${resPdu}`));
 
 				continue;
 			}

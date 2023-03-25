@@ -18,7 +18,7 @@ export default (): testFuncResult => {
 
 		if (out.result !== test.code) {
 			console.log(clr(TxtColor.red, `	#${total} ${test.name}`), clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'failed!'));
-			console.log(clr(TxtColor.red, `		Text:\n		${test.text}		Expecting:\n		${test.code}\n		Got:\n		${out.result}`));
+			console.log(clr(TxtColor.red, `		Text:\n		${test.text}\n		Expecting:\n		${test.code}\n		Got:\n		${out.result}`));
 
 			continue;
 		}
