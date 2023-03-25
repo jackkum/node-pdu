@@ -85,6 +85,10 @@ export class Deliver extends PDU {
 		return this._data.parts;
 	}
 
+	getPartStrings() {
+		return this._data.parts.map((part) => part.toString(this));
+	}
+
 	toString() {
 		return this.getStart();
 	}
