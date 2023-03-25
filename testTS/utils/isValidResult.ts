@@ -1,4 +1,5 @@
-import { SCA, SCAType } from '../../dist/utils/export';
+import { SCA } from '../../dist/utils/SCA/SCA';
+import { SCAType } from '../../dist/utils/SCA/SCAType';
 import { pdu } from '../index';
 
 export interface Check {
