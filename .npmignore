@@ -1,0 +1,14 @@
+.git
+.github
+docs
+node_modules
+src
+testTS
+.editorconfig
+.eslintrc.js
+.gitignore
+.npmignore
+.prettierrc.js
+tsconfig.json
+typedoc.css
+yarn.lock
