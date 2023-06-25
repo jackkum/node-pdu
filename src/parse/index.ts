@@ -19,7 +19,7 @@ import parseVP from './parseUtils/parseVP';
 export type GetSubstr = (length: number) => string;
 
 export function parse(str: string) {
-	let pduParse = str.toLocaleUpperCase();
+	let pduParse = str.toUpperCase();
 
 	const getSubstr: GetSubstr = (length: number) => {
 		const str = pduParse.substring(0, length);
