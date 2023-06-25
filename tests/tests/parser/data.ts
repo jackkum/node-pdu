@@ -247,6 +247,13 @@ export const data: Data[] = [
 			dcs: 0x10,
 			data: { text: 'This is a flash!' }
 		}
+	},
+	{
+		name: 'Test small letters at input',
+		pduStr: '07919730071111f1400b919746121611f100008111701222822310050a03000410846f3619f476b3f3',
+		expectedResult: {
+			data: { text: 'Bold only' }
+		}
 	}
 ];
 
