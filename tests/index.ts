@@ -21,6 +21,10 @@ async function start() {
 	console.log(clr({ txt: TxtColor.white, modifier: Modifier.bright }, `${total} tests finished!`));
 	console.log('	', clr(TxtColor.green, `Success: ${success}`), clr(TxtColor.red, `Failed: ${total - success}`));
 	console.log('\n');
+
+	if (total !== success) {
+		process.exit(1);
+	}
 }
 
 start();
