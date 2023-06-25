@@ -1,0 +1,33 @@
+name: 🧪 Tests
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  tests:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: ⚡ Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: 🔎 Lint
+        run: yarn lint
+
+      - name: 🔨 Build Library
+        run: yarn build:lib
+
+      - name: 🔨 Build Tests
+        run: yarn build:tests
+
+      - name: 🧪 Run Tests
+        run: yarn run:tests
