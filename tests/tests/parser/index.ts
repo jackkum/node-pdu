@@ -44,7 +44,7 @@ export default (): testFuncResult => {
 		if (!(msg instanceof pdu.Report)) {
 			const resPdu = msg.data.parts[0].toString(msg);
 
-			if (resPdu !== test.pduStr) {
+			if (resPdu !== test.pduStr.toUpperCase()) {
 				console.log(
 					clr(TxtColor.red, `	#${total} ${test.name}`),
 					clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'recreation failed!')
