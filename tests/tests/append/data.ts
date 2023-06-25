@@ -25,7 +25,7 @@ export const data: Data[] = [
 		pduStr2: '07919730071111F1400B919746121611F10000811170021232230C06080412340302A03A9C05',
 		expectedResult: {
 			data: {
-				text: 'What\'s up,'
+				text: "What's up,"
 			}
 		}
 	},
@@ -35,7 +35,7 @@ export const data: Data[] = [
 		pduStr2: '07919730071111F1400B919746121611F10000811170021242230D06080412340303A076D8FD03',
 		expectedResult: {
 			data: {
-				text: 'What\'s man?'
+				text: "What's man?"
 			}
 		}
 	},

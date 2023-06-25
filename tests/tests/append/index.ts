@@ -20,7 +20,11 @@ export default (): testFuncResult => {
 			msg1 = pdu.parse(test.pduStr1);
 			msg2 = pdu.parse(test.pduStr2);
 		} catch (e) {
-			console.log(clr(TxtColor.red, `	#${total} ${test.name}`), clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'parsing failed'), '\n\n');
+			console.log(
+				clr(TxtColor.red, `	#${total} ${test.name}`),
+				clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'parsing failed'),
+				'\n\n'
+			);
 			console.error(e);
 
 			continue;
@@ -63,7 +67,10 @@ export default (): testFuncResult => {
 		const isValid = isValidResult(test.expectedResult || {}, msg1);
 
 		if (!test.expectedError && isValid !== true) {
-			console.log(clr(TxtColor.red, `	#${total} ${test.name}`), clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'has an invalid data!'));
+			console.log(
+				clr(TxtColor.red, `	#${total} ${test.name}`),
+				clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'has an invalid data!')
+			);
 			console.log(clr(TxtColor.red, isValid));
 
 			continue;

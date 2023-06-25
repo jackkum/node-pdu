@@ -13,4 +13,3 @@ export * from './Type/PDUType';
 export * from './Type/ReportType';
 export * from './Type/SubmitType';
 export * from './VP';
-
