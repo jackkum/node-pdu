@@ -22,12 +22,13 @@
 	},
 	"scripts": {
 		"build": "yarn build:lib && yarn build:docs",
-		"build:test": "tsc testTS/index.ts --outDir test --skipLibCheck",
+		"build:tests": "tsc tests/index.ts --outDir tests-dist --skipLibCheck",
 		"build:lib": "tsc",
 		"build:docs": "typedoc --entryPoints src/index.ts --out docs --excludePrivate --customCss typedoc.css",
 		"lint": "eslint src --ext .ts",
 		"prepack": "yarn build:lib",
-		"test": "yarn build:lib && yarn build:test && node test/index.js"
+		"run:tests": "node tests-dist/index.js",
+		"test": "yarn build:lib && yarn build:tests && yarn run:tests"
 	},
 	"keywords": [
 		"pdu",

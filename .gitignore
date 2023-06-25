@@ -1,4 +1,4 @@
 dist
 docs
 node_modules
-test
+tests-dist
