@@ -1,4 +1,3 @@
-
 export type testFunc = () => testFuncResult;
 export type testFuncResult = { total: number; success: number };
 

@@ -18,7 +18,11 @@ export default (): testFuncResult => {
 		try {
 			msg = pdu.parse(test.pduStr);
 		} catch (e) {
-			console.log(clr(TxtColor.red, `	#${total} ${test.name}`), clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'parsing failed!'), '\n\n');
+			console.log(
+				clr(TxtColor.red, `	#${total} ${test.name}`),
+				clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'parsing failed!'),
+				'\n\n'
+			);
 			console.error(e);
 			console.log('\n');
 
@@ -28,7 +32,10 @@ export default (): testFuncResult => {
 		const isValid = isValidResult(test.expectedResult, msg);
 
 		if (isValid !== true) {
-			console.log(clr(TxtColor.red, `	#${total} ${test.name}`), clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'has an invalid data!'));
+			console.log(
+				clr(TxtColor.red, `	#${total} ${test.name}`),
+				clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'has an invalid data!')
+			);
 			console.log(clr(TxtColor.red, isValid));
 
 			continue;
@@ -38,7 +45,10 @@ export default (): testFuncResult => {
 			const resPdu = msg.data.parts[0].toString(msg);
 
 			if (resPdu !== test.pduStr) {
-				console.log(clr(TxtColor.red, `	#${total} ${test.name}`), clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'recreation failed!'));
+				console.log(
+					clr(TxtColor.red, `	#${total} ${test.name}`),
+					clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'recreation failed!')
+				);
 				console.log(clr(TxtColor.red, `		Origin:\n		${test.pduStr}\n		Result:\n		${resPdu}`));
 
 				continue;

@@ -16,16 +16,8 @@ module.exports = {
 	},
 	plugins: ['@typescript-eslint'],
 	rules: {
-		indent: [
-			'error',
-			'tab',
-			{
-				SwitchCase: 1
-			}
-		],
+		'no-mixed-spaces-and-tabs': 'off',
 		'linebreak-style': ['error', 'unix'],
-		quotes: ['error', 'single'],
-		semi: ['error', 'always'],
 		'space-before-blocks': 'error',
 		'space-before-function-paren': [
 			'error',

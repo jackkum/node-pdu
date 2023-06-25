@@ -3,7 +3,8 @@
 docs
 node_modules
 src
-testTS
+tests
+tests-dist
 .editorconfig
 .eslintrc.js
 .gitignore

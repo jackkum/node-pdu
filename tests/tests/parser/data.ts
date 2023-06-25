@@ -162,7 +162,7 @@ export const data: Data[] = [
 				current: 1
 			},
 			data: {
-				text: 'What\'s'
+				text: "What's"
 			}
 		}
 	},

@@ -1,6 +1,6 @@
 # Protocol Description Unit for NodeJS
 
-*Project is looking for maintainer*
+_Project is looking for maintainer_
 
 [![NPM](https://nodei.co/npm/node-pdu.png)](https://npmjs.org/package/node-pdu)
 
@@ -62,4 +62,4 @@ yarn test
 
 👤 **jackkum**
 
-- Github: [@jackkum](https://github.com/jackkum)
+-   Github: [@jackkum](https://github.com/jackkum)
