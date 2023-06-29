@@ -58,8 +58,10 @@ yarn test
 
 ---
 
-## Author
+## ❤️ Contributors
 
-👤 **jackkum**
+**Thanks to these people who have contributed to this project:**
 
--   Github: [@jackkum](https://github.com/jackkum)
+[![Contributors](https://contrib.rocks/image?repo=jackkum/node-pdu)](https://github.com/jackkum/node-pdu/graphs/contributors)
+
+Made with [contrib.rocks](https://contrib.rocks).

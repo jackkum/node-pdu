@@ -2,7 +2,7 @@
 	"name": "node-pdu",
 	"version": "2.0.0",
 	"description": "Creates and parses SMS PDU strings",
-	"license": "ISC",
+	"license": "MIT",
 	"author": "jackkum",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
