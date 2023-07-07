@@ -17,21 +17,26 @@
 		"@typescript-eslint/eslint-plugin": "5.61.0",
 		"@typescript-eslint/parser": "5.61.0",
 		"eslint": "8.44.0",
+		"eslint-config-prettier": "8.8.0",
 		"prettier": "3.0.0",
 		"typedoc": "~0.24.8",
 		"typescript": "5.1.6"
 	},
 	"scripts": {
 		"build": "yarn build:lib && yarn build:docs",
-		"build:tests": "tsc tests/index.ts --outDir tests-dist --skipLibCheck",
+		"build:tests": "tsc --project tests",
 		"build:lib": "tsc",
 		"build:docs": "typedoc --entryPoints src/index.ts --out docs --excludePrivate --customCss typedoc.css",
-		"lint": "yarn lint:code && yarn lint:format",
+		"lint": "yarn lint:format && yarn lint:code && yarn lint:tests",
 		"lint:code": "eslint src --ext .ts",
+		"lint:tests": "eslint tests --ext .ts",
 		"lint:format": "prettier --check .",
 		"prepack": "yarn build:lib",
 		"run:tests": "node tests-dist/index.js",
 		"test": "yarn build:lib && yarn build:tests && yarn run:tests"
+	},
+	"engines": {
+		"node": ">=16"
 	},
 	"keywords": [
 		"pdu",
