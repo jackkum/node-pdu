@@ -144,11 +144,11 @@ export class Helper {
 		for (const symb of text) {
 			let code;
 
-			if ((code = Helper.ALPHABET_7BIT.indexOf(symb)) != -1) {
+			if ((code = Helper.ALPHABET_7BIT.indexOf(symb)) !== -1) {
 				buf |= code << bufLen;
 				bufLen += 7;
 				length++;
-			} else if ((code = Helper.EXTENDED_TABLE.indexOf(symb)) != -1) {
+			} else if ((code = Helper.EXTENDED_TABLE.indexOf(symb)) !== -1) {
 				buf |= ((code << 7) | 27) << bufLen;
 				bufLen += 14;
 				length += 2;

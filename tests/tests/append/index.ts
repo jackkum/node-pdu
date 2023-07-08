@@ -51,7 +51,7 @@ export default (): testFuncResult => {
 				continue;
 			}
 		} catch (e) {
-			if (e?.message !== test.expectedError) {
+			if (e instanceof Error && e?.message !== test.expectedError) {
 				console.log(
 					clr(TxtColor.red, `	#${total} ${test.name}`),
 					clr({ txt: TxtColor.red, modifier: Modifier.bright }, 'appending failed!'),

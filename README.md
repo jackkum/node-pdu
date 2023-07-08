@@ -25,8 +25,8 @@ const str = '07919730071111F1000B919746121611F10000811170021222230DC8329BFD6681E
 const out = parse(str);
 
 if (out instanceof Deliver) {
-	console.log(out.data.getText());
-	// Output: "Hello, world!"
+  console.log(out.data.getText());
+  // Output: "Hello, world!"
 }
 
 /*
