@@ -162,7 +162,7 @@ export const data: Data[] = [
 				current: 1
 			},
 			data: {
-				text: 'What\'s'
+				text: "What's"
 			}
 		}
 	},
@@ -246,6 +246,13 @@ export const data: Data[] = [
 		expectedResult: {
 			dcs: 0x10,
 			data: { text: 'This is a flash!' }
+		}
+	},
+	{
+		name: 'Test small letters at input',
+		pduStr: '07919730071111f1400b919746121611f100008111701222822310050a03000410846f3619f476b3f3',
+		expectedResult: {
+			data: { text: 'Bold only' }
 		}
 	}
 ];

@@ -2,7 +2,7 @@
 	"name": "node-pdu",
 	"version": "2.0.0",
 	"description": "Creates and parses SMS PDU strings",
-	"license": "ISC",
+	"license": "MIT",
 	"author": "jackkum",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -13,21 +13,30 @@
 	"homepage": "https://github.com/jackkum/node-pdu",
 	"dependencies": {},
 	"devDependencies": {
-		"@types/node": "16.11.7",
-		"@typescript-eslint/eslint-plugin": "5.56.0",
-		"@typescript-eslint/parser": "5.56.0",
-		"eslint": "8.36.0",
-		"typedoc": "0.23.28",
-		"typescript": "5.0.2"
+		"@types/node": "^16.18.38",
+		"@typescript-eslint/eslint-plugin": "5.61.0",
+		"@typescript-eslint/parser": "5.61.0",
+		"eslint": "8.44.0",
+		"eslint-config-prettier": "8.8.0",
+		"prettier": "3.0.0",
+		"typedoc": "~0.24.8",
+		"typescript": "5.1.6"
 	},
 	"scripts": {
 		"build": "yarn build:lib && yarn build:docs",
-		"build:test": "tsc testTS/index.ts --outDir test --skipLibCheck",
+		"build:tests": "tsc --project tests",
 		"build:lib": "tsc",
 		"build:docs": "typedoc --entryPoints src/index.ts --out docs --excludePrivate --customCss typedoc.css",
-		"lint": "eslint src --ext .ts",
+		"lint": "yarn lint:format && yarn lint:code && yarn lint:tests",
+		"lint:code": "eslint src --ext .ts",
+		"lint:tests": "eslint tests --ext .ts",
+		"lint:format": "prettier --check .",
 		"prepack": "yarn build:lib",
-		"test": "yarn build:lib && yarn build:test && node test/index.js"
+		"run:tests": "node tests-dist/index.js",
+		"test": "yarn build:lib && yarn build:tests && yarn run:tests"
+	},
+	"engines": {
+		"node": ">=16"
 	},
 	"keywords": [
 		"pdu",

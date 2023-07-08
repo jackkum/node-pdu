@@ -1,6 +1,6 @@
 # Protocol Description Unit for NodeJS
 
-*Project is looking for maintainer*
+_Project is looking for maintainer_
 
 [![NPM](https://nodei.co/npm/node-pdu.png)](https://npmjs.org/package/node-pdu)
 
@@ -25,8 +25,8 @@ const str = '07919730071111F1000B919746121611F10000811170021222230DC8329BFD6681E
 const out = parse(str);
 
 if (out instanceof Deliver) {
-	console.log(out.data.getText());
-	// Output: "Hello, world!"
+  console.log(out.data.getText());
+  // Output: "Hello, world!"
 }
 
 /*
@@ -58,8 +58,10 @@ yarn test
 
 ---
 
-## Author
+## ❤️ Contributors
 
-👤 **jackkum**
+**Thanks to these people who have contributed to this project:**
 
-- Github: [@jackkum](https://github.com/jackkum)
+[![Contributors](https://contrib.rocks/image?repo=jackkum/node-pdu)](https://github.com/jackkum/node-pdu/graphs/contributors)
+
+Made with [contrib.rocks](https://contrib.rocks).
