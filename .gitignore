@@ -2,3 +2,6 @@ dist
 docs
 node_modules
 tests-dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

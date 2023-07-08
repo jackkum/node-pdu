@@ -9,6 +9,7 @@ tests-dist
 .eslintrc.js
 .gitignore
 .npmignore
+.prettierignore
 .prettierrc.js
 tsconfig.json
 typedoc.css
