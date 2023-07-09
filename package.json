@@ -11,7 +11,9 @@
 		"url": "https://github.com/jackkum/node-pdu.git"
 	},
 	"homepage": "https://github.com/jackkum/node-pdu",
-	"dependencies": {},
+	"dependencies": {
+		"tslib": "^2.6.0"
+	},
 	"devDependencies": {
 		"@types/node": "^16.18.38",
 		"@typescript-eslint/eslint-plugin": "5.61.0",
