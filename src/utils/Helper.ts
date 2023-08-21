@@ -178,7 +178,7 @@ export class Helper {
 
 		for (let i = 0; i < text.length; i++) {
 			const byte = Helper.order(text.substring(i, i + 1));
-			pdu += this.toStringHex(byte);
+			pdu += this.toStringHex(byte, 4);
 			length += 2;
 		}
 
