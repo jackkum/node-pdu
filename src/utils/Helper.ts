@@ -6,7 +6,7 @@ export class Helper {
 
 	static readonly limitNormal = 140;
 	static readonly limitCompress = 160;
-	static readonly limitUnicode = 140;
+	static readonly limitUnicode = 70;
 
 	static ucfirst(str: string) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
