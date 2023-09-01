@@ -6,7 +6,7 @@ export class Helper {
 
 	static readonly limitNormal = 140;
 	static readonly limitCompress = 160;
-	static readonly limitUnicode = 140;
+	static readonly limitUnicode = 70;
 
 	static ucfirst(str: string) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
@@ -178,7 +178,7 @@ export class Helper {
 
 		for (let i = 0; i < text.length; i++) {
 			const byte = Helper.order(text.substring(i, i + 1));
-			pdu += this.toStringHex(byte);
+			pdu += this.toStringHex(byte, 4);
 			length += 2;
 		}
 
