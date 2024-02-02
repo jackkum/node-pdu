@@ -41,9 +41,10 @@ export class Helper {
 	static decode7Bit(text: string, inLen?: number, alignBits?: number) {
 		const ret: number[] = [];
 		const data = Buffer.from(text, 'hex');
+
 		let dataPos = 0; // Position in the input octets stream
 		let buf = 0; // Bit buffer, used in FIFO manner
-		let bufLen = 0; // Ammount of buffered bits
+		let bufLen = 0; // Amount of buffered bits
 		let inDone = 0;
 		let inExt = false;
 
@@ -67,22 +68,18 @@ export class Helper {
 			}
 
 			// Fetch next septet from the FIFO buffer
-			let digit = buf & 0x7f;
+			const digit = buf & 0x7f;
+
 			buf >>= 7;
 			bufLen -= 7;
 			inDone++;
 
 			if (digit % 128 === 27) {
+				// Escape character
 				inExt = true;
 			} else {
-				let c;
-
-				if (inExt) {
-					c = Helper.EXTENDED_TABLE.charCodeAt(digit);
-					inExt = false;
-				} else {
-					c = Helper.ALPHABET_7BIT.charCodeAt(digit);
-				}
+				let c = inExt ? Helper.EXTENDED_TABLE.charCodeAt(digit) || 63 : Helper.ALPHABET_7BIT.charCodeAt(digit);
+				inExt = false;
 
 				if (c < 0x80) {
 					ret.push(c);
@@ -94,7 +91,7 @@ export class Helper {
 					(Helper.EXTENDED_TABLE.charCodeAt(digit + 1) & 0xfc00) === 0xdc00
 				) {
 					// Surrogate Pair
-					c = 0x10000 + ((c & 0x03ff) << 10) + (Helper.EXTENDED_TABLE.charCodeAt(++digit) & 0x03ff);
+					c = 0x10000 + ((c & 0x03ff) << 10) + (Helper.EXTENDED_TABLE.charCodeAt(digit + 1) & 0x03ff);
 					ret.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 0x3f), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
 				} else {
 					ret.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
