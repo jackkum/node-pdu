@@ -123,7 +123,7 @@ export class Helper {
 		const buffer = Buffer.from(text, 'ascii');
 
 		for (let i = 0; i < buffer.length; i++) {
-			pdu += this.toStringHex(buffer[i]);
+			pdu += Helper.toStringHex(buffer[i]);
 			length++;
 		}
 
@@ -159,14 +159,15 @@ export class Helper {
 			}
 
 			while (bufLen >= 8) {
-				ret += this.toStringHex(buf & 0xff);
+				ret += Helper.toStringHex(buf & 0xff);
 				buf >>= 8;
 				bufLen -= 8;
 			}
 		}
 
-		if (bufLen) {
-			ret += this.toStringHex(buf); // here we have less then 8 bits
+		if (bufLen > 0) {
+			// here we have less then 8 bits
+			ret += Helper.toStringHex(buf);
 		}
 
 		return { length, result: ret };
@@ -178,7 +179,7 @@ export class Helper {
 
 		for (let i = 0; i < text.length; i++) {
 			const byte = Helper.order(text.substring(i, i + 1));
-			pdu += this.toStringHex(byte, 4);
+			pdu += Helper.toStringHex(byte, 4);
 			length += 2;
 		}
 
