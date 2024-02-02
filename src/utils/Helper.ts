@@ -127,36 +127,40 @@ export class Helper {
 		return { length, result: pdu };
 	}
 
-	static encode7Bit(text: string, alignBits?: number) {
-		let ret = '';
+	static encode7Bit(text: string, alignBits = 0) {
+		let result = '';
 		let buf = 0; // Bit buffer, used in FIFO manner
-		let bufLen = 0; // Ammount of buffered bits
-		let length = 0; // Ammount of produced septets
+		let bufLen = 0; // Amount of buffered bits
+		let length = 0; // Amount of produced septets
 
-		// Insert leading alignment zero bits if requested
-		if (alignBits) {
-			bufLen += alignBits;
-		}
+		// Adjust for initial padding if alignBits is specified
+		bufLen = alignBits;
 
 		for (const symb of text) {
-			let code;
+			let code: number;
 
 			if ((code = Helper.ALPHABET_7BIT.indexOf(symb)) !== -1) {
 				buf |= code << bufLen;
 				bufLen += 7;
 				length++;
 			} else if ((code = Helper.EXTENDED_TABLE.indexOf(symb)) !== -1) {
-				buf |= ((code << 7) | 27) << bufLen;
-				bufLen += 14;
-				length += 2;
+				// Add escape character first
+				buf |= 27 << bufLen; // 27 is the escape character in the 7-bit alphabet
+				bufLen += 7;
+				length++;
+
+				// Then add extended character
+				buf |= code << bufLen;
+				bufLen += 7;
+				length++;
 			} else {
-				buf |= 37 << bufLen; // Place space symbol
+				buf |= 32 << bufLen; // Replace with space symbol (' ')
 				bufLen += 7;
 				length++;
 			}
 
 			while (bufLen >= 8) {
-				ret += Helper.toStringHex(buf & 0xff);
+				result += Helper.toStringHex(buf & 0xff);
 				buf >>= 8;
 				bufLen -= 8;
 			}
@@ -164,10 +168,10 @@ export class Helper {
 
 		if (bufLen > 0) {
 			// here we have less then 8 bits
-			ret += Helper.toStringHex(buf);
+			result += Helper.toStringHex(buf);
 		}
 
-		return { length, result: ret };
+		return { length, result };
 	}
 
 	static encode16Bit(text: string) {
