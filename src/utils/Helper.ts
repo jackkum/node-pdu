@@ -187,12 +187,6 @@ export class Helper {
 	}
 
 	static toStringHex(number: number, fill = 2) {
-		let str = number.toString(16);
-
-		while (str.length < fill) {
-			str = '0' + str;
-		}
-
-		return str.toUpperCase();
+		return number.toString(16).padStart(fill, '0').toUpperCase();
 	}
 }
