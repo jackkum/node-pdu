@@ -137,7 +137,7 @@ export class Data {
 				size += headerSize;
 			}
 
-			this._parts.push(new Part(data, size, '', header));
+			this._parts.push(new Part(data, size, text, header));
 		});
 	}
 
