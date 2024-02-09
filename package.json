@@ -22,7 +22,8 @@
 		"eslint-config-prettier": "9.1.0",
 		"prettier": "3.2.4",
 		"typedoc": "~0.25.7",
-		"typescript": "5.3.3"
+		"typescript": "5.3.3",
+		"vitest": "^1.2.2"
 	},
 	"scripts": {
 		"build": "yarn build:lib && yarn build:docs",
