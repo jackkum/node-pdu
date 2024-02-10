@@ -26,8 +26,5 @@ jobs:
       - name: 🔨 Build Library
         run: yarn build:lib
 
-      - name: 🔨 Build Tests
-        run: yarn build:tests
-
       - name: 🧪 Run Tests
-        run: yarn run:tests
+        run: yarn test
