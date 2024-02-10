@@ -5,11 +5,11 @@ import { DeliverType } from './Type/DeliverType';
 import { ReportType } from './Type/ReportType';
 import { SubmitType } from './Type/SubmitType';
 
-export interface PDUOptions {
+export type PDUOptions = {
 	serviceCenterAddress?: SCA;
 	protocolIdentifier?: PID;
 	dataCodingScheme?: DCS;
-}
+};
 
 /*
  * Protocol Description Unit

@@ -3,9 +3,9 @@ import { SCA } from './utils/SCA/SCA';
 import { SCTS } from './utils/SCTS';
 import { ReportType } from './utils/Type/ReportType';
 
-export interface ReportOptions extends PDUOptions {
+export type ReportOptions = PDUOptions & {
 	type?: ReportType;
-}
+};
 
 export class Report extends PDU {
 	private _type: ReportType;

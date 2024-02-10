@@ -3,10 +3,10 @@ import { PDU } from './PDU';
 import { SCTS } from './SCTS';
 import { PDUType } from './Type/PDUType';
 
-export interface VPOptions {
+export type VPOptions = {
 	datetime?: Date;
 	interval?: number;
-}
+};
 
 /*
  * Validity Period

@@ -1,12 +1,12 @@
 import { Helper } from '../Helper';
 
-export interface TypeParams {
+export type TypeParams = {
 	replyPath: number;
 	userDataHeader: number;
 	statusReportRequest: number;
 	validityPeriodFormat: number;
 	rejectDuplicates: number;
-}
+};
 
 export abstract class PDUType {
 	abstract messageTypeIndicator: number;

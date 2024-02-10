@@ -1,11 +1,11 @@
 import { PDUType } from './PDUType';
 
-export interface DeliverParams {
+export type DeliverParams = {
 	replyPath?: number;
 	userDataHeader?: number;
 	statusReportRequest?: number;
 	mms?: number;
-}
+};
 
 export class DeliverType extends PDUType {
 	readonly messageTypeIndicator = PDUType.SMS_DELIVER;

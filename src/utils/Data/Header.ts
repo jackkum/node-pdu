@@ -153,7 +153,7 @@ export class Header {
 	}
 }
 
-export interface IES {
+export type IES = {
 	type: number;
 	dataHex: string;
 	data?: {
@@ -161,4 +161,4 @@ export interface IES {
 		maxMsgNum: number;
 		msgSeqNo: number;
 	};
-}
+};

@@ -1,8 +1,8 @@
-export interface PIDOptions {
+export type PIDOptions = {
 	pid?: number;
 	indicates?: number;
 	type?: number;
-}
+};
 
 /*
  * Protocol Identifier

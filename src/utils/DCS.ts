@@ -1,6 +1,6 @@
 import { Helper } from './Helper';
 
-export interface DCSOptions {
+export type DCSOptions = {
 	encodeGroup?: number;
 	dataEncoding?: number;
 	compressedText?: boolean;
@@ -13,7 +13,7 @@ export interface DCSOptions {
 	dataCodingAndMessageClass?: boolean;
 	messageIndication?: number;
 	messageIndicationType?: number;
-}
+};
 
 /*
  * Data Coding Scheme

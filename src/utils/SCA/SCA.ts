@@ -1,9 +1,9 @@
 import { Helper } from '../Helper';
 import { SCAType } from './SCAType';
 
-export interface SCAOptions {
+export type SCAOptions = {
 	type?: SCAType;
-}
+};
 
 export class SCA {
 	type: SCAType;

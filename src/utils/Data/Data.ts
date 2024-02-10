@@ -5,12 +5,12 @@ import { Helper } from '../Helper';
 import { Header } from './Header';
 import { Part } from './Part';
 
-export interface DataOptions {
+export type DataOptions = {
 	data?: string;
 	size?: number;
 	parts?: Part[];
 	isUnicode?: boolean;
-}
+};
 
 export class Data {
 	static readonly HEADER_SIZE = 7; // UDHL + UDH

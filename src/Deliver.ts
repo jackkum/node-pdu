@@ -5,10 +5,10 @@ import { SCA } from './utils/SCA/SCA';
 import { SCTS } from './utils/SCTS';
 import { DeliverType } from './utils/Type/DeliverType';
 
-export interface DeliverOptions extends PDUOptions {
+export type DeliverOptions = PDUOptions & {
 	type?: DeliverType;
 	serviceCenterTimeStamp?: SCTS;
-}
+};
 
 export class Deliver extends PDU {
 	private _type: DeliverType;

@@ -1,12 +1,12 @@
 import { PDUType } from './PDUType';
 
-export interface SubmitParams {
+export type SubmitParams = {
 	replyPath?: number;
 	userDataHeader?: number;
 	statusReportRequest?: number;
 	validityPeriodFormat?: number;
 	rejectDuplicates?: number;
-}
+};
 
 export class SubmitType extends PDUType {
 	readonly messageTypeIndicator = PDUType.SMS_SUBMIT;

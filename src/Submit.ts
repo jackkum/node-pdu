@@ -5,11 +5,11 @@ import { SCA } from './utils/SCA/SCA';
 import { SubmitType } from './utils/Type/SubmitType';
 import { VP } from './utils/VP';
 
-export interface SubmitOptions extends PDUOptions {
+export type SubmitOptions = PDUOptions & {
 	type?: SubmitType;
 	messageReference?: number;
 	validityPeriod?: VP;
-}
+};
 
 export class Submit extends PDU {
 	private _type: SubmitType;
