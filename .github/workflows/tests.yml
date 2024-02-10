@@ -3,6 +3,9 @@ name: 🧪 Tests
 on:
   workflow_dispatch:
   push:
+    branches:
+      - '*'
+      - '!draft/*'
   pull_request:
     types: [opened, synchronize]
 
