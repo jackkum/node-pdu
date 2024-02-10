@@ -22,20 +22,19 @@
 		"eslint-config-prettier": "9.1.0",
 		"prettier": "3.2.4",
 		"typedoc": "~0.25.7",
-		"typescript": "5.3.3"
+		"typescript": "5.3.3",
+		"vitest": "^1.2.2"
 	},
 	"scripts": {
 		"build": "yarn build:lib && yarn build:docs",
-		"build:tests": "tsc --project tests",
 		"build:lib": "tsc",
 		"build:docs": "typedoc --entryPoints src/index.ts --out docs --excludePrivate --customCss typedoc.css",
 		"lint": "yarn lint:format && yarn lint:code && yarn lint:tests",
+		"lint:format": "prettier --check .",
 		"lint:code": "eslint src --ext .ts",
 		"lint:tests": "eslint tests --ext .ts",
-		"lint:format": "prettier --check .",
-		"prepack": "yarn build:lib",
-		"run:tests": "node tests-dist/index.js",
-		"test": "yarn build:lib && yarn build:tests && yarn run:tests"
+		"test": "vitest run --dir ./tests/",
+		"test:watch": "vitest watch --dir ./tests/"
 	},
 	"engines": {
 		"node": ">=16.0.0"
