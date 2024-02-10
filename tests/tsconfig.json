@@ -1,8 +1,4 @@
 {
 	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"outDir": "../tests-dist",
-		"skipLibCheck": false
-	},
 	"include": ["./"]
 }

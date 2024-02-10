@@ -1,8 +1,9 @@
-// File also used in 7BitEncoding
+import { describe, expect, test } from 'vitest';
+import { utils } from '../src/index';
 
-export const data: Data[] = [
+const tests = [
 	{
-		name: 'Lowercase letters',
+		testName: 'Lowercase letters',
 		text: 'abcdefghijklmnopqrstuvwxyz',
 		code: '61F1985C369FD169F59ADD76BFE171F99C5EB7DFF1793D'
 	},
@@ -68,22 +69,26 @@ export const data: Data[] = [
 		codeLen: 8
 	},
 	{
-		name: 'final "}" decoding error',
+		name: 'Final "}" decoding error',
 		text: '{test}',
 		code: '1B14BD3CA76F52'
 	},
 	{
-		name: 'text with alignment',
+		name: 'Text with alignment',
 		text: 'abc',
 		code: '088BC7',
 		alignBits: 3
 	}
 ];
 
-export interface Data {
-	name: string;
-	text: string;
-	code: string;
-	codeLen?: number;
-	alignBits?: number;
-}
+describe('7bit encoding', () => {
+	test.each(tests)('$testName', ({ text, alignBits, code: result, codeLen }) => {
+		expect(utils.Helper.encode7Bit(text, alignBits)).toEqual({ result, length: codeLen ? codeLen : expect.any(Number) });
+	});
+});
+
+describe('7bit decoding', () => {
+	test.each(tests)('$testName', ({ code, codeLen, alignBits, text }) => {
+		expect(utils.Helper.decode7Bit(code, codeLen, alignBits)).toBe(text);
+	});
+});
