@@ -1,7 +1,11 @@
 import { Helper } from '../Helper';
 
-export type HeaderParams = { POINTER: number; SEGMENTS: number; CURRENT: number } | { type: number; dataHex: string }[];
-
+/**
+ * Represents the header information in a segmented SMS message part.
+ *
+ * Contains metadata essential for the reassembly of segmented SMS messages, such as part numbering and
+ * reference identifiers. It ensures that multipart messages are correctly reconstructed upon receipt.
+ */
 export class Header {
 	static readonly IE_CONCAT_8BIT_REF = 0x00;
 	static readonly IE_CONCAT_16BIT_REF = 0x08;
@@ -79,7 +83,9 @@ export class Header {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	toJSON() {
@@ -152,6 +158,17 @@ export class Header {
 		return Helper.toStringHex(udhl) + head;
 	}
 }
+
+export type HeaderParams =
+	| {
+			POINTER: number;
+			SEGMENTS: number;
+			CURRENT: number;
+	  }
+	| {
+			type: number;
+			dataHex: string;
+	  }[];
 
 export type IES = {
 	type: number;

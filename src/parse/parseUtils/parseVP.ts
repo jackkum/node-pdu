@@ -4,6 +4,16 @@ import { VP } from '../../utils/VP';
 import { GetSubstr } from '../index';
 import parseSCTS from './parseSCTS';
 
+/**
+ * Parses the validity period (VP) from a PDU string based on the specified validity period format (VPF).
+ * This function is used specifically for parsing the validity period of a Submit type PDU.
+ *
+ * @param type The SubmitType instance specifying the validity period format (VPF)
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ *
+ * @returns An instance of VP representing the parsed validity period
+ * @throws Throws an error if an unknown validity period format (VPF) is encountered
+ */
 export default function parseVP(type: SubmitType, getPduSubstr: GetSubstr) {
 	const vpf = type.validityPeriodFormat;
 	const vp = new VP();

@@ -4,6 +4,15 @@ import { ReportType } from '../../utils/Type/ReportType';
 import { SubmitType } from '../../utils/Type/SubmitType';
 import { GetSubstr } from '../index';
 
+/**
+ * Parses the PDU type from the provided PDU string.
+ * This function extracts and constructs an appropriate PDU type object based on the type indicator byte in the PDU string.
+ *
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ *
+ * @returns An instance of DeliverType, SubmitType, or ReportType representing the parsed PDU type
+ * @throws Throws an error if an unknown SMS type is encountered
+ */
 export default function parseType(getPduSubstr: GetSubstr) {
 	const buffer = Buffer.from(getPduSubstr(2), 'hex');
 	const byte = buffer[0];

@@ -1,24 +1,11 @@
 import { Helper } from './Helper';
 
-export type DCSOptions = {
-	encodeGroup?: number;
-	dataEncoding?: number;
-	compressedText?: boolean;
-	textAlphabet?: number;
-	useMessageClass?: boolean;
-	classMessage?: number;
-	discardMessage?: boolean;
-	storeMessage?: boolean;
-	storeMessageUCS2?: boolean;
-	dataCodingAndMessageClass?: boolean;
-	messageIndication?: number;
-	messageIndicationType?: number;
-};
-
-/*
- * Data Coding Scheme
+/**
+ * Represents the Data Coding Scheme (DCS) of an SMS message.
+ *
+ * Defines how the message content is encoded, affecting character set selection and special message features.
+ * It plays a key role in ensuring that the message content is correctly displayed on the receiving device.
  */
-
 export class DCS {
 	/*
 	 * GSM 03.38 V7.0.0 (1998-07).
@@ -68,7 +55,9 @@ export class DCS {
 	}
 
 	/*
-	 * getter & setter
+	 * ================================================
+	 *                Getter & Setter
+	 * ================================================
 	 */
 
 	get encodeGroup() {
@@ -225,7 +214,9 @@ export class DCS {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	getValue() {
@@ -301,3 +292,18 @@ export class DCS {
 		return Helper.toStringHex(this.getValue());
 	}
 }
+
+export type DCSOptions = {
+	encodeGroup?: number;
+	dataEncoding?: number;
+	compressedText?: boolean;
+	textAlphabet?: number;
+	useMessageClass?: boolean;
+	classMessage?: number;
+	discardMessage?: boolean;
+	storeMessage?: boolean;
+	storeMessageUCS2?: boolean;
+	dataCodingAndMessageClass?: boolean;
+	messageIndication?: number;
+	messageIndicationType?: number;
+};

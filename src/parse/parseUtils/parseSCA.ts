@@ -3,6 +3,15 @@ import { SCA } from '../../utils/SCA/SCA';
 import { SCAType } from '../../utils/SCA/SCAType';
 import { GetSubstr } from '../index';
 
+/**
+ * Parses the Service Center Address (SCA) from a given substring extractor.
+ * This function extracts and constructs an SCA object from the provided PDU string parts.
+ *
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ * @param isAddress Indicates whether the SCA represents an address (OA or DA)
+ *
+ * @returns An instance of SCA containing the parsed SCA information
+ */
 export default function parseSCA(getPduSubstr: GetSubstr, isAddress: boolean) {
 	const buffer = Buffer.from(getPduSubstr(2), 'hex');
 	const sca = new SCA(isAddress);

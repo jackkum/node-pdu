@@ -1,9 +1,11 @@
 import { Helper } from './Helper';
 
-/*
- * Service Center Time Stamp
+/**
+ * Represents the Service Centre Time Stamp (SCTS) of an SMS message.
+ *
+ * Marks the time and date the SMSC received the message, used in delivery reports and incoming
+ * messages for timing analysis and record-keeping, providing a temporal reference for the message's handling.
  */
-
 export class SCTS {
 	readonly time: number;
 	readonly tzOff: number;
@@ -14,7 +16,9 @@ export class SCTS {
 	}
 
 	/*
-	 * private functions
+	 * ================================================
+	 *                Private functions
+	 * ================================================
 	 */
 
 	private getDateTime() {
@@ -29,7 +33,9 @@ export class SCTS {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	getIsoString() {

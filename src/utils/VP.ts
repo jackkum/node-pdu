@@ -3,15 +3,12 @@ import { PDU } from './PDU';
 import { SCTS } from './SCTS';
 import { PDUType } from './Type/PDUType';
 
-export type VPOptions = {
-	datetime?: Date;
-	interval?: number;
-};
-
-/*
- * Validity Period
+/**
+ * Represents the Validity Period (VP) of an SMS message.
+ *
+ * Defines how long an SMS is stored at the SMSC before delivery attempts cease. This duration
+ * ensures messages remain relevant and can vary from minutes to days based on the sender's preference.
  */
-
 export class VP {
 	static readonly PID_ASSIGNED = 0x00;
 
@@ -24,7 +21,9 @@ export class VP {
 	}
 
 	/*
-	 * getter & setter
+	 * ================================================
+	 *                Getter & Setter
+	 * ================================================
 	 */
 
 	get dateTime() {
@@ -51,7 +50,9 @@ export class VP {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	toString(pdu: PDU): string {
@@ -94,3 +95,8 @@ export class VP {
 		return '';
 	}
 }
+
+export type VPOptions = {
+	datetime?: Date;
+	interval?: number;
+};

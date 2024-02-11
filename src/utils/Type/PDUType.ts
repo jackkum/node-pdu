@@ -1,13 +1,11 @@
 import { Helper } from '../Helper';
 
-export type TypeParams = {
-	replyPath: number;
-	userDataHeader: number;
-	statusReportRequest: number;
-	validityPeriodFormat: number;
-	rejectDuplicates: number;
-};
-
+/**
+ * Represents the abstract base for different types of Protocol Data Units (PDU) in SMS messaging.
+ *
+ * This abstract class defines the core structure for various SMS PDU types and
+ * ensuring standardized handling and processing across different messaging operations.
+ */
 export abstract class PDUType {
 	abstract messageTypeIndicator: number;
 
@@ -35,7 +33,9 @@ export abstract class PDUType {
 	}
 
 	/*
-	 * getter & setter
+	 * ================================================
+	 *                Getter & Setter
+	 * ================================================
 	 */
 
 	get userDataHeader() {
@@ -80,7 +80,9 @@ export abstract class PDUType {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	getValue() {
@@ -98,3 +100,11 @@ export abstract class PDUType {
 		return Helper.toStringHex(this.getValue());
 	}
 }
+
+export type TypeParams = {
+	replyPath: number;
+	userDataHeader: number;
+	statusReportRequest: number;
+	validityPeriodFormat: number;
+	rejectDuplicates: number;
+};

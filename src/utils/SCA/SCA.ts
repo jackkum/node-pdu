@@ -1,10 +1,12 @@
 import { Helper } from '../Helper';
 import { SCAType } from './SCAType';
 
-export type SCAOptions = {
-	type?: SCAType;
-};
-
+/**
+ * Represents the Service Centre Address (SCA) of an SMS message.
+ *
+ * The address of the SMSC responsible for the delivery of the message. It is crucial for routing the SMS
+ * through the correct service center to reach the intended recipient.
+ */
 export class SCA {
 	type: SCAType;
 
@@ -19,7 +21,9 @@ export class SCA {
 	}
 
 	/*
-	 * getter & setter
+	 * ================================================
+	 *                Getter & Setter
+	 * ================================================
 	 */
 
 	get isAddress() {
@@ -70,7 +74,9 @@ export class SCA {
 	}
 
 	/*
-	 * private functions
+	 * ================================================
+	 *                Private functions
+	 * ================================================
 	 */
 
 	private detectScaType(phone: string) {
@@ -98,7 +104,9 @@ export class SCA {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	getOffset() {
@@ -131,7 +139,9 @@ export class SCA {
 	}
 
 	/*
-	 * static functions
+	 * ================================================
+	 *                 Static functions
+	 * ================================================
 	 */
 
 	static mapFilterDecode(letter: string) {
@@ -170,3 +180,7 @@ export class SCA {
 		}
 	}
 }
+
+export type SCAOptions = {
+	type?: SCAType;
+};

@@ -3,6 +3,12 @@ import { Submit } from '../../Submit';
 import { Helper } from '../Helper';
 import { Header } from './Header';
 
+/**
+ * Represents a part of a segmented SMS message.
+ *
+ * Used for messages that exceed the size limit for a single SMS and must be split. Each part contains
+ * a segment of the full message, facilitating the reassembly of the complete message by the recipient.
+ */
 export class Part {
 	readonly data: string;
 	readonly size: number;
@@ -17,7 +23,9 @@ export class Part {
 	}
 
 	/*
-	 * private functions
+	 * ================================================
+	 *                Private functions
+	 * ================================================
 	 */
 
 	private getPduString(pdu: Deliver | Submit) {
@@ -29,7 +37,9 @@ export class Part {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	toString(pdu: Deliver | Submit) {

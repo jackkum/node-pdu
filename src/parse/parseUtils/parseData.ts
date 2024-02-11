@@ -6,6 +6,19 @@ import { Helper } from '../../utils/Helper';
 import { PDUType } from '../../utils/Type/PDUType';
 import { GetSubstr } from '../index';
 
+/**
+ * Parses the user data portion of a PDU string into a Data object.
+ *
+ * This function extracts the user data from the PDU string, including any headers, decodes it according to the specified data coding scheme,
+ * and constructs a Data object representing the parsed user data.
+ *
+ * @param type The type of the PDU, determining how the user data is parsed
+ * @param dataCodingScheme The data coding scheme used to encode the user data
+ * @param userDataLength The length of the user data in octets
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ *
+ * @returns A Data object containing the parsed user data
+ */
 export default function parseData(type: PDUType, dataCodingScheme: DCS, userDataLength: number, getPduSubstr: GetSubstr) {
 	const dataOptions: DataOptions = {};
 
@@ -22,6 +35,19 @@ export default function parseData(type: PDUType, dataCodingScheme: DCS, userData
 	return new Data(dataOptions);
 }
 
+/**
+ * Parses a single part of the user data from a PDU string.
+ *
+ * This function extracts a part of the user data from the PDU string, including any headers if present,
+ * decodes it according to the specified data coding scheme, and constructs a Part object representing the parsed part.
+ *
+ * @param type The type of the PDU, determining how the user data is parsed
+ * @param dataCodingScheme The data coding scheme used to encode the user data
+ * @param userDataLength The length of the user data in octets
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ *
+ * @returns An object containing the parsed text, size, and Part object representing the parsed part
+ */
 function parsePart(type: PDUType, dataCodingScheme: DCS, userDataLength: number, getPduSubstr: GetSubstr) {
 	let length = 0;
 
@@ -66,6 +92,15 @@ function parsePart(type: PDUType, dataCodingScheme: DCS, userDataLength: number,
 	return { text, size: userDataLength, part };
 }
 
+/**
+ * Parses the user data header from a PDU string.
+ *
+ * This function extracts and parses the user data header (if present) from the PDU string,
+ * constructing a Header object representing the parsed header information.
+ *
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ * @returns A Header object representing the parsed user data header
+ */
 function parseHeader(getPduSubstr: GetSubstr) {
 	let buf = Buffer.from(getPduSubstr(2), 'hex');
 	let ieLen = 0;

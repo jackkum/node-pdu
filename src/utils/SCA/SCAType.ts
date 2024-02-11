@@ -1,5 +1,11 @@
 import { Helper } from '../Helper';
 
+/**
+ * Defines the Service Centre Address (SCA) format in SMS messages.
+ *
+ * Specifies the SCA format, crucial for SMS routing and delivery. Types may include international,
+ * national, and others, ensuring compatibility across networks.
+ */
 export class SCAType {
 	static readonly TYPE_UNKNOWN = 0x00;
 	static readonly TYPE_INTERNATIONAL = 0x01;
@@ -28,7 +34,9 @@ export class SCAType {
 	}
 
 	/*
-	 * getter & setter
+	 * ================================================
+	 *                Getter & Setter
+	 * ================================================
 	 */
 
 	get type() {
@@ -50,7 +58,9 @@ export class SCAType {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	getValue() {

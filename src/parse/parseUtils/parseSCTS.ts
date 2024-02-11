@@ -1,6 +1,15 @@
 import { SCTS } from '../../utils/SCTS';
 import { GetSubstr } from '../index';
 
+/**
+ * Parses the Service Center Time Stamp (SCTS) from a given substring extractor.
+ * This function extracts and constructs an SCTS object representing the date and time provided in the PDU string.
+ *
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ *
+ * @returns An instance of SCTS containing the parsed date and time information
+ * @throws Throws an error if there are not enough bytes to parse or if parsing fails
+ */
 export default function parseSCTS(getPduSubstr: GetSubstr) {
 	const hex = getPduSubstr(14);
 	const params: number[] = [];

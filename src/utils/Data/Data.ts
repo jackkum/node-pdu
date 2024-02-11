@@ -5,13 +5,12 @@ import { Helper } from '../Helper';
 import { Header } from './Header';
 import { Part } from './Part';
 
-export type DataOptions = {
-	data?: string;
-	size?: number;
-	parts?: Part[];
-	isUnicode?: boolean;
-};
-
+/**
+ * Represents the data content of an SMS message.
+ *
+ * Holds the actual message content, whether text or binary data. It is central to the purpose of SMS,
+ * conveying the intended information from sender to recipient.
+ */
 export class Data {
 	static readonly HEADER_SIZE = 7; // UDHL + UDH
 
@@ -28,7 +27,9 @@ export class Data {
 	}
 
 	/*
-	 * getter & setter
+	 * ================================================
+	 *                Getter & Setter
+	 * ================================================
 	 */
 
 	get data() {
@@ -60,7 +61,9 @@ export class Data {
 	}
 
 	/*
-	 * private functions
+	 * ================================================
+	 *                Private functions
+	 * ================================================
 	 */
 
 	private checkData() {
@@ -191,7 +194,9 @@ export class Data {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	getText() {
@@ -208,3 +213,10 @@ export class Data {
 		this.sortParts();
 	}
 }
+
+export type DataOptions = {
+	data?: string;
+	size?: number;
+	parts?: Part[];
+	isUnicode?: boolean;
+};

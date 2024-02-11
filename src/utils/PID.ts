@@ -1,13 +1,9 @@
-export type PIDOptions = {
-	pid?: number;
-	indicates?: number;
-	type?: number;
-};
-
-/*
- * Protocol Identifier
+/**
+ * Represents the Protocol Identifier (PID) of an SMS message.
+ *
+ * Specifies the type or nature of the message, allowing the system to handle it appropriately. It can
+ * indicate special types of messages such as voicemail notifications or system messages, among others.
  */
-
 export class PID {
 	static readonly PID_ASSIGNED = 0x00; // Assigns bits 0..5 as defined below
 	static readonly PID_GSM_03_40 = 0x01; // See GSM 03.40 TP-PID complete definition
@@ -34,7 +30,9 @@ export class PID {
 	}
 
 	/*
-	 * getter & setter
+	 * ================================================
+	 *                Getter & Setter
+	 * ================================================
 	 */
 
 	get pid() {
@@ -65,7 +63,9 @@ export class PID {
 	}
 
 	/*
-	 * public functions
+	 * ================================================
+	 *                 Public functions
+	 * ================================================
 	 */
 
 	getValue() {
@@ -76,3 +76,9 @@ export class PID {
 		return '' + this.getValue();
 	}
 }
+
+export type PIDOptions = {
+	pid?: number;
+	indicates?: number;
+	type?: number;
+};

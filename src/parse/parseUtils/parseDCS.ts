@@ -1,6 +1,13 @@
 import { DCS, DCSOptions } from '../../utils/DCS';
 import { GetSubstr } from '../index';
 
+/**
+ * Parses Data Coding Scheme (DCS) information from a PDU substring extractor.
+ * This function extracts and constructs a DCS object from the provided PDU substring.
+ *
+ * @param getPduSubstr A function to extract substrings from the PDU string
+ * @returns A DCS object representing the parsed Data Coding Scheme information
+ */
 export default function parseDCS(getPduSubstr: GetSubstr) {
 	const buffer = Buffer.from(getPduSubstr(2), 'hex');
 	const byte = buffer[0];
