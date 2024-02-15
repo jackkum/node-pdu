@@ -26,10 +26,27 @@ export class VP {
 	 * ================================================
 	 */
 
+	/**
+	 * Retrieves the datetime set for the Validity Period.
+	 *
+	 * This property represents the exact date and time the SMS should be considered valid.
+	 * If null, it implies that a specific datetime has not been set for this validity period.
+	 *
+	 * @returns The datetime as a Date object or null if not set
+	 */
 	get dateTime() {
 		return this._datetime;
 	}
 
+	/**
+	 * Sets the datetime for the SMS Validity Period.
+	 *
+	 * This method allows setting a specific date and time until which the SMS is considered valid.
+	 * Can be set using a Date object or a string that can be parsed into a Date.
+	 *
+	 * @param datetime The datetime to set as a Date object or a string representation
+	 * @returns The instance of this VP, allowing for method chaining
+	 */
 	setDateTime(datetime: string | Date) {
 		if (datetime instanceof Date) {
 			this._datetime = datetime;
@@ -40,10 +57,27 @@ export class VP {
 		return this;
 	}
 
+	/**
+	 * Retrieves the interval set for the Validity Period.
+	 *
+	 * This property represents the duration in seconds for which the SMS should be considered valid.
+	 * If null, it implies that a specific interval has not been set for this validity period.
+	 *
+	 * @returns The interval in seconds or null if not set
+	 */
 	get interval() {
 		return this._interval;
 	}
 
+	/**
+	 * Sets the interval for the SMS Validity Period.
+	 *
+	 * This method allows setting a specific duration in seconds until which the SMS is considered valid.
+	 * It's an alternative to setting a specific datetime.
+	 *
+	 * @param interval The interval in seconds to set for the validity period
+	 * @returns The instance of this VP, allowing for method chaining
+	 */
 	setInterval(interval: number) {
 		this._interval = interval;
 		return this;
@@ -55,6 +89,16 @@ export class VP {
 	 * ================================================
 	 */
 
+	/**
+	 * Converts the Validity Period to a PDU string representation.
+	 *
+	 * This method generates a string suitable for inclusion in a PDU, based on the validity period's format.
+	 * It can handle both absolute and relative formats and adjusts the PDU's validity period format accordingly.
+	 * This is critical for ensuring that the SMS's validity period is correctly interpreted by the SMSC.
+	 *
+	 * @param pdu The PDU instance to which this validity period belongs
+	 * @returns A string representation of the validity period for inclusion in the PDU
+	 */
 	toString(pdu: PDU): string {
 		const type = pdu.type;
 

@@ -88,6 +88,15 @@ export class Header {
 	 * ================================================
 	 */
 
+	/**
+	 * Converts the header information to an object.
+	 *
+	 * This function is useful for serializing the header information, including the message reference number,
+	 * total number of segments, and current segment number. It's particularly useful for diagnostics or
+	 * interfacing with systems that require these details in a structured format.
+	 *
+	 * @returns An object containing the pointer
+	 */
 	toJSON() {
 		return {
 			POINTER: this.getPointer(),
@@ -96,6 +105,14 @@ export class Header {
 		};
 	}
 
+	/**
+	 * Calculates the total size of the User Data Header Length (UDHL).
+	 *
+	 * The size is calculated based on the length of all Information Elements (IEs) included in the header.
+	 * This is crucial for correctly encoding and decoding segmented SMS messages.
+	 *
+	 * @returns The total size of the UDHL
+	 */
 	getSize() {
 		let udhl = 0;
 
@@ -106,6 +123,14 @@ export class Header {
 		return udhl;
 	}
 
+	/**
+	 * Retrieves the type of the concatenation Information Element (IE).
+	 *
+	 * This method checks if there's a known concatenation IE present and returns its type.
+	 * It distinguishes between 8-bit and 16-bit reference numbers for concatenated messages.
+	 *
+	 * @returns The type of the concatenation IE, or undefined if not present
+	 */
 	getType() {
 		if (this.concatIeIdx !== undefined) {
 			return this.ies[this.concatIeIdx].type;
@@ -114,6 +139,14 @@ export class Header {
 		return;
 	}
 
+	/**
+	 * Gets the size of the pointer (message reference number) in bytes.
+	 *
+	 * The size is determined based on the type of concatenation IE present, reflecting the
+	 * length of the message reference number field.
+	 *
+	 * @returns The size of the pointer in bytes, or 0 if no concatenation IE is present
+	 */
 	getPointerSize() {
 		if (this.concatIeIdx !== undefined) {
 			this.ies[this.concatIeIdx].dataHex.length / 2;
@@ -122,6 +155,14 @@ export class Header {
 		return 0;
 	}
 
+	/**
+	 * Retrieves the message reference number for the segmented SMS message.
+	 *
+	 * This number is used to correlate all segments of a multi-part SMS message, ensuring
+	 * they can be correctly reassembled upon receipt.
+	 *
+	 * @returns The message reference number, or 0 if no concatenation IE is present
+	 */
 	getPointer() {
 		if (this.concatIeIdx !== undefined) {
 			return this.ies[this.concatIeIdx].data?.msgRef;
@@ -130,6 +171,14 @@ export class Header {
 		return 0;
 	}
 
+	/**
+	 * Gets the total number of segments in the segmented SMS message.
+	 *
+	 * This information is critical for understanding how many parts the message has been
+	 * divided into, enabling correct reassembly.
+	 *
+	 * @returns The total number of segments, or 1 if no concatenation IE is present
+	 */
 	getSegments() {
 		if (this.concatIeIdx !== undefined) {
 			return this.ies[this.concatIeIdx].data?.maxMsgNum;
@@ -138,6 +187,14 @@ export class Header {
 		return 1;
 	}
 
+	/**
+	 * Retrieves the current segment number of this part of the segmented SMS message.
+	 *
+	 * This number indicates the order of the current segment in the sequence of the total
+	 * message parts, aiding in proper reconstruction.
+	 *
+	 * @returns The current segment number, or 1 if no concatenation IE is present
+	 */
 	getCurrent() {
 		if (this.concatIeIdx !== undefined) {
 			return this.ies[this.concatIeIdx].data?.msgSeqNo;
@@ -146,6 +203,15 @@ export class Header {
 		return 1;
 	}
 
+	/**
+	 * Generates a string representation of the User Data Header (UDH).
+	 *
+	 * This method constructs the UDH string by concatenating the encoded lengths and data of all
+	 * Information Elements (IEs), prefixed with the overall UDH length. It's essential for
+	 * encoding the header part of segmented SMS messages.
+	 *
+	 * @returns A string representing the encoded User Data Header
+	 */
 	toString() {
 		let udhl = 0;
 		let head = '';

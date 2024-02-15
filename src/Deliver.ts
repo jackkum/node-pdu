@@ -171,18 +171,6 @@ export class Deliver extends PDU {
 	}
 
 	/**
-	 * Converts the entire Deliver PDU into a string representation.
-	 *
-	 * This method is intended to provide a complete textual representation of the Deliver PDU,
-	 * including all headers and the message content, formatted according to the PDU protocol.
-	 *
-	 * @returns A string representation of the Deliver PDU
-	 */
-	toString() {
-		return this.getStart();
-	}
-
-	/**
 	 * Generates a string representation of the start of the PDU.
 	 *
 	 * This method constructs the initial part of the PDU string, including information like the
@@ -202,6 +190,18 @@ export class Deliver extends PDU {
 		str += this._serviceCenterTimeStamp.toString();
 
 		return str;
+	}
+
+	/**
+	 * Converts the entire Deliver PDU into a string representation.
+	 *
+	 * This method is intended to provide a complete textual representation of the Deliver PDU,
+	 * including all headers and the message content, formatted according to the PDU protocol.
+	 *
+	 * @returns A string representation of the Deliver PDU
+	 */
+	toString() {
+		return this.getStart();
 	}
 }
 

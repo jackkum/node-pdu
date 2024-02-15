@@ -1,3 +1,10 @@
+/**
+ * A utility class providing static methods for encoding and decoding SMS messages.
+ *
+ * This class contains methods for converting text into various encoding formats used in SMS,
+ * such as GSM 7-bit, 8-bit, and UCS-2 (16-bit). It also includes utility methods
+ * for handling characters and converting values to hexadecimal strings.
+ */
 export class Helper {
 	static readonly ALPHABET_7BIT =
 		'@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞ\x1bÆæßÉ !"#¤%&\'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ`¿abcdefghijklmnopqrstuvwxyzäöñüà';
@@ -8,18 +15,42 @@ export class Helper {
 	static readonly limitCompress = 160;
 	static readonly limitUnicode = 70;
 
+	/**
+	 * Capitalizes the first character of the input string.
+	 *
+	 * @param str The string to capitalize
+	 * @returns The input string with its first character capitalized
+	 */
 	static ucfirst(str: string) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 
+	/**
+	 * Returns the Unicode code point of the first character of the input string.
+	 *
+	 * @param char A single character string
+	 * @returns The Unicode code point of the character
+	 */
 	static order(char: string) {
 		return char.charCodeAt(0);
 	}
 
+	/**
+	 * Returns the character represented by the specified Unicode code point.
+	 *
+	 * @param order The Unicode code point
+	 * @returns A string containing the character represented by the code point
+	 */
 	static char(order: number) {
 		return String.fromCharCode(order);
 	}
 
+	/**
+	 * Decodes a 16-bit encoded string into a human-readable text.
+	 *
+	 * @param text The 16-bit encoded hexadecimal string
+	 * @returns The decoded text
+	 */
 	static decode16Bit(text: string) {
 		return (text.match(/.{1,4}/g) || [])
 			.map((hex) => {
@@ -29,6 +60,12 @@ export class Helper {
 			.join('');
 	}
 
+	/**
+	 * Decodes an 8-bit encoded string into a human-readable text.
+	 *
+	 * @param text The 8-bit encoded hexadecimal string
+	 * @returns The decoded text
+	 */
 	static decode8Bit(text: string) {
 		return (text.match(/.{1,2}/g) || [])
 			.map((hex) => {
@@ -38,6 +75,15 @@ export class Helper {
 			.join('');
 	}
 
+	/**
+	 * Decodes a 7-bit encoded string into a human-readable text.
+	 *
+	 * @param text The 7-bit encoded hexadecimal string
+	 * @param inLen The length of the input data in septets
+	 * @param alignBits The number of bits for alignment
+	 *
+	 * @returns The decoded text
+	 */
 	static decode7Bit(text: string, inLen?: number, alignBits?: number) {
 		const ret: number[] = [];
 		const data = Buffer.from(text, 'hex');
@@ -117,6 +163,12 @@ export class Helper {
 		return Buffer.from(ret).toString();
 	}
 
+	/**
+	 * Encodes a text string into 8-bit hexadecimal PDU format.
+	 *
+	 * @param text The text to encode
+	 * @returns An object containing the length of the encoded text and the result as a hexadecimal string
+	 */
 	static encode8Bit(text: string) {
 		let length = 0;
 		let pdu = '';
@@ -130,6 +182,14 @@ export class Helper {
 		return { length, result: pdu };
 	}
 
+	/**
+	 * Encodes a text string into 7-bit hexadecimal PDU format.
+	 *
+	 * @param text The text to encode
+	 * @param alignBits The number of bits for alignment, if needed
+	 *
+	 * @returns An object containing the length of the encoded text in septets and the result as a hexadecimal string
+	 */
 	static encode7Bit(text: string, alignBits?: number) {
 		let ret = '';
 		let buf = 0; // Bit buffer, used in FIFO manner
@@ -172,6 +232,12 @@ export class Helper {
 		return { length, result: ret };
 	}
 
+	/**
+	 * Encodes a text string into 16-bit hexadecimal PDU format.
+	 *
+	 * @param text The text to encode
+	 * @returns An object containing the length of the encoded text in septets and the result as a hexadecimal string
+	 */
 	static encode16Bit(text: string) {
 		let length = 0;
 		let pdu = '';
@@ -185,6 +251,13 @@ export class Helper {
 		return { length, result: pdu };
 	}
 
+	/**
+	 * Converts a number to a hexadecimal string with optional zero padding.
+	 *
+	 * @param number The number to convert
+	 * @param fill The minimum length of the resulting string, padded with zeros if necessary
+	 * @returns The number as a hexadecimal string
+	 */
 	static toStringHex(number: number, fill = 2) {
 		let str = number.toString(16);
 

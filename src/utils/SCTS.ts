@@ -38,6 +38,14 @@ export class SCTS {
 	 * ================================================
 	 */
 
+	/**
+	 * Converts the SCTS to an ISO 8601 string format with a custom time zone offset.
+	 *
+	 * This method formats the date and time into an easily readable ISO 8601 format,
+	 * adjusting for the stored time zone offset to reflect the local time at the service centre.
+	 *
+	 * @returns The SCTS as an ISO 8601 formatted string with a custom time zone offset.
+	 */
 	getIsoString() {
 		const datetime = this.getDateWithOffset()
 			.toISOString()
@@ -50,6 +58,15 @@ export class SCTS {
 		return datetime + (this.tzOff > 0 ? '+' : '-') + offset + ':00';
 	}
 
+	/**
+	 * Converts the SCTS to a string representation based on the SMS PDU specifications.
+	 *
+	 * This method formats the service centre time stamp into a semi-octet representation suitable
+	 * for inclusion in a PDU message, converting the date and time components and including the
+	 * time zone in a standardized format.
+	 *
+	 * @returns The SCTS as a string formatted according to the SMS PDU specifications
+	 */
 	toString() {
 		return (this.getDateTime().match(/.{1,2}/g) || []).map((s) => s.split('').reverse().join('')).join('');
 	}

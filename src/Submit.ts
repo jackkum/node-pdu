@@ -199,20 +199,6 @@ export class Submit extends PDU {
 	}
 
 	/**
-	 * Converts the entire Submit PDU into a string representation.
-	 *
-	 * This method is intended to provide a complete textual representation of the Submit PDU,
-	 * including all headers and the message content, formatted according to the PDU protocol.
-	 *
-	 * @returns A string representation of the Submit PDU
-	 */
-	toString() {
-		return this.getParts()
-			.map((part) => part.toString(this))
-			.join('\n');
-	}
-
-	/**
 	 * Generates a string representation of the start of the PDU.
 	 *
 	 * This method constructs the initial part of the PDU string, including information like the
@@ -233,6 +219,20 @@ export class Submit extends PDU {
 		str += this._validityPeriod.toString(this);
 
 		return str;
+	}
+
+	/**
+	 * Converts the entire Submit PDU into a string representation.
+	 *
+	 * This method is intended to provide a complete textual representation of the Submit PDU,
+	 * including all headers and the message content, formatted according to the PDU protocol.
+	 *
+	 * @returns A string representation of the Submit PDU
+	 */
+	toString() {
+		return this.getParts()
+			.map((part) => part.toString(this))
+			.join('\n');
 	}
 }
 
