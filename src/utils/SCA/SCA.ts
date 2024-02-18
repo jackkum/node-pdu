@@ -26,22 +26,54 @@ export class SCA {
 	 * ================================================
 	 */
 
+	/**
+	 * Indicates whether the current instance represents an address.
+	 * @returns True if the instance represents an address; otherwise, false
+	 */
 	get isAddress() {
 		return this._isAddress;
 	}
 
+	/**
+	 * Retrieves the size of the encoded address.
+	 * The size is calculated based on the encoding scheme used.
+	 *
+	 * @returns The size of the encoded address
+	 */
 	get size() {
 		return this._size;
 	}
 
+	/**
+	 * Retrieves the encoded representation of the address.
+	 * The encoding scheme depends on the type of address.
+	 *
+	 * @returns The encoded address as a hexadecimal string
+	 */
 	get encoded() {
 		return this._encoded;
 	}
 
+	/**
+	 * Retrieves the phone number associated with the address.
+	 * @returns The phone number associated with the address
+	 */
 	get phone() {
 		return this._phone;
 	}
 
+	/**
+	 * Sets the phone number associated with the address.
+	 *
+	 * This method allows setting the phone number for the address. It also performs
+	 * encoding based on the address type and detects the type of address if requested.
+	 *
+	 * @param phone The phone number to set
+	 * @param detectType Flag indicating whether to detect the address type
+	 * @param SC Flag indicating whether the address is a service center address
+	 *
+	 * @returns The instance of this SCA, allowing for method chaining
+	 */
 	setPhone(phone: string, detectType = true, SC = false) {
 		this._phone = phone.trim();
 		this._isAddress = !SC;
@@ -109,10 +141,24 @@ export class SCA {
 	 * ================================================
 	 */
 
+	/**
+	 * Retrieves the offset for the SCA in the PDU.
+	 * The offset indicates the position of the SCA within the PDU.
+	 *
+	 * @returns The offset for the SCA in the PDU
+	 */
 	getOffset() {
 		return !this._size ? 2 : this._size + 4;
 	}
 
+	/**
+	 * Converts the SCA instance to a string representation.
+	 *
+	 * This method converts the SCA instance to its string representation suitable for
+	 * inclusion in the PDU.
+	 *
+	 * @returns The string representation of the SCA
+	 */
 	toString() {
 		let str = Helper.toStringHex(this.size);
 
@@ -144,6 +190,13 @@ export class SCA {
 	 * ================================================
 	 */
 
+	/**
+	 * Maps and decodes a hexadecimal letter to its corresponding character.
+	 * This method decodes a hexadecimal letter back to its original character value.
+	 *
+	 * @param letter The hexadecimal letter to decode
+	 * @returns The decoded character
+	 */
 	static mapFilterDecode(letter: string) {
 		const buffer = Buffer.from(letter, 'hex');
 
@@ -163,6 +216,13 @@ export class SCA {
 		}
 	}
 
+	/**
+	 * Maps and encodes a character to its corresponding hexadecimal representation.
+	 * This method encodes a character to its hexadecimal representation.
+	 *
+	 * @param letter The character to encode
+	 * @returns The encoded hexadecimal representation
+	 */
 	static mapFilterEncode(letter: string) {
 		switch (letter) {
 			case '*':

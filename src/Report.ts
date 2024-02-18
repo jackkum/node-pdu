@@ -47,7 +47,7 @@ export class Report extends PDU {
 	private _status: number;
 
 	/**
-	 * Constructs a Report PDU instance representing the delivery status of an SMS message.
+	 * Constructs a Report PDU instance.
 	 *
 	 * @param address The sender's address as a string or an instance of SCA
 	 * @param reference The reference number of the SMS message for which this report is generated

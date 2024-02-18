@@ -13,6 +13,10 @@ export class Header {
 	private ies: IES[] = [];
 	private concatIeIdx?: number;
 
+	/**
+	 * Constructs a Header instance.
+	 * @param params The parameters for constructing the Header instance
+	 */
 	constructor(params: HeaderParams) {
 		if (Array.isArray(params)) {
 			/*

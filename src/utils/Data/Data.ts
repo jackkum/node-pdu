@@ -19,6 +19,10 @@ export class Data {
 	private _parts: Part[];
 	private _isUnicode: boolean;
 
+	/**
+	 * Constructs a Data instance.
+	 * @param options An object containing optional parameters for the Data instance
+	 */
 	constructor(options: DataOptions = {}) {
 		this._size = options.size || 0;
 		this._data = options.data || '';

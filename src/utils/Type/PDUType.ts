@@ -24,6 +24,10 @@ export abstract class PDUType {
 	private _statusReportRequest: number;
 	private _validityPeriodFormat: number;
 
+	/**
+	 * Constructs a PDUType instance.
+	 * @param params Parameters for configuring the PDUType instance
+	 */
 	constructor(params: TypeParams) {
 		this.replyPath = params.replyPath;
 		this._userDataHeader = params.userDataHeader;

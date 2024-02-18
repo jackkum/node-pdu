@@ -20,7 +20,7 @@ export abstract class PDU {
 	private _dataCodingScheme: DCS;
 
 	/**
-	 * Constructs a PDU instance.
+	 * Constructs a Protocol Description Unit (PDU) instance.
 	 *
 	 * @param address The address as a string or SCA instance
 	 * @param options An object containing optional parameters for the PDU instance

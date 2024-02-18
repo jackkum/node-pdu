@@ -6,6 +6,10 @@ import { PDUType } from './PDUType';
 export class DeliverType extends PDUType {
 	readonly messageTypeIndicator = PDUType.SMS_DELIVER;
 
+	/**
+	 * Constructs a DeliverType instance.
+	 * @param params Parameters for configuring the DeliverType instance
+	 */
 	constructor(params: DeliverParams = {}) {
 		super({
 			replyPath: params.replyPath ? 1 & params.replyPath : 0,

@@ -15,6 +15,10 @@ export class VP {
 	private _datetime: Date | null;
 	private _interval: number | null;
 
+	/**
+	 * Constructs a Validity Period (VP) instance.
+	 * @param options An object containing optional parameters for the VP instance
+	 */
 	constructor(options: VPOptions = {}) {
 		this._datetime = options.datetime || null;
 		this._interval = options.interval || null;

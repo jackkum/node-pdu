@@ -6,6 +6,10 @@ import { PDUType } from './PDUType';
 export class ReportType extends PDUType {
 	readonly messageTypeIndicator = PDUType.SMS_REPORT;
 
+	/**
+	 * Constructs a ReportType instance.
+	 * @param params Parameters for configuring the ReportType instance
+	 */
 	constructor(params: ReportParams = {}) {
 		super({
 			replyPath: params.replyPath ? 1 & params.replyPath : 0,

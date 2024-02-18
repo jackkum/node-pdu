@@ -23,6 +23,10 @@ export class PID {
 	private _indicates: number;
 	private _type: number;
 
+	/**
+	 * Constructs a Protocol Identifier (PID) instance.
+	 * @param options An object containing optional parameters for the PID instance
+	 */
 	constructor(options: PIDOptions = {}) {
 		this._pid = options.pid || PID.PID_ASSIGNED;
 		this._indicates = options.indicates || 0x00;

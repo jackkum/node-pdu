@@ -6,6 +6,10 @@ import { PDUType } from './PDUType';
 export class SubmitType extends PDUType {
 	readonly messageTypeIndicator = PDUType.SMS_SUBMIT;
 
+	/**
+	 * Constructs a SubmitType instance.
+	 * @param params Parameters for configuring the SubmitType instance
+	 */
 	constructor(params: SubmitParams = {}) {
 		super({
 			replyPath: params.replyPath ? 1 & params.replyPath : 0,

@@ -10,6 +10,12 @@ export class SCTS {
 	readonly time: number;
 	readonly tzOff: number;
 
+	/**
+	 * Constructs a Service Centre Time Stamp (SCTS) instance.
+	 *
+	 * @param date The date object representing the time and date the message was received
+	 * @param tzOff The time zone offset in minutes, defaults to the local time zone offset if not provided
+	 */
 	constructor(date: Date, tzOff?: number) {
 		this.time = date.getTime() / 1000;
 		this.tzOff = tzOff || -1 * date.getTimezoneOffset();
