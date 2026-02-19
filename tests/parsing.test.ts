@@ -93,6 +93,10 @@ describe('SMS PDU parser', () => {
 			pduStr: '07919730071111F1000B919746121611F1000081117002122223081B14BD3CA76F52',
 			text: '{test}',
 			size: 8
+		},
+		{
+			pduStr: '07914889200009F4040B914843807079F300006220813205908205CF35C84D00',
+			text: 'Ok nè'
 		}
 	])('should parse extended 7-bit symbol "$text"', ({ pduStr, text, size }) => {
 		const parsedPdu = parse(pduStr);

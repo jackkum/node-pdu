@@ -162,24 +162,20 @@ export class Helper {
 				// Escape character
 				inExt = true;
 			} else {
+				// Determine Unicode code point for this septet
 				let c = inExt ? Helper.EXTENDED_TABLE.charCodeAt(digit) || 63 : Helper.ALPHABET_7BIT.charCodeAt(digit);
 				inExt = false;
 
-				if (c < 0x80) {
-					ret.push(c);
-				} else if (c < 0x800) {
-					ret.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
-				} else if (
-					(c & 0xfc00) === 0xd800 &&
-					digit + 1 < Helper.EXTENDED_TABLE.length &&
-					(Helper.EXTENDED_TABLE.charCodeAt(digit + 1) & 0xfc00) === 0xdc00
-				) {
-					// Surrogate Pair
-					c = 0x10000 + ((c & 0x03ff) << 10) + (Helper.EXTENDED_TABLE.charCodeAt(digit + 1) & 0x03ff);
-					ret.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 0x3f), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
-				} else {
-					ret.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+				// If we encountered a high surrogate in the extended table, and next is a low
+				// surrogate, combine into a single code point.
+				if ((c & 0xfc00) === 0xd800 && inExt === false && digit + 1 < Helper.EXTENDED_TABLE.length) {
+					const low = Helper.EXTENDED_TABLE.charCodeAt(digit + 1);
+					if ((low & 0xfc00) === 0xdc00) {
+						c = 0x10000 + ((c & 0x03ff) << 10) + (low & 0x03ff);
+					}
 				}
+
+				ret.push(c);
 			}
 
 			// Do we process all input data
@@ -195,7 +191,9 @@ export class Helper {
 			}
 		}
 
-		return this.TEXT_DECODER.decode(new Uint8Array(ret));
+		// Convert collected Unicode code points to string
+		// Use String.fromCodePoint to correctly handle supplementary planes
+		return String.fromCodePoint(...ret);
 	}
 
 	/**
