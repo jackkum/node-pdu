@@ -7,7 +7,7 @@ const bannerComment = `/*
  * 🏷️ Version:    ${pkg.version}
  * 📄 License:    ${pkg.license}
  * 🕒 Build:      ${new Date().toISOString()}
- * 🔗 Repository: ${pkg.repository.url}
+ * 🔗 Repository: ${pkg.repository}
  * 👤 Author:     ${pkg.author}
  * 👤 Maintainer: Julian Wowra <development@julianwowra.de>
  */\n`;
@@ -16,12 +16,12 @@ const sharedConfig: Options = {
 	tsconfig: './tsconfig.json',
 	entry: ['src/index.ts'],
 	outDir: 'dist',
-	target: 'es2022',
+	target: 'es2024',
+	sourcemap: true,
 
 	clean: true,
 	minify: true,
 	treeshake: true,
-	sourcemap: true,
 	skipNodeModulesBundle: true,
 	banner: {
 		js: bannerComment

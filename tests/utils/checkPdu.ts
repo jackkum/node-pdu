@@ -60,7 +60,7 @@ export function expectUserDataHeader(pdu: Deliver | Submit, expecting: { current
 	expect(header?.getSegments()).toBe(expecting.segments);
 }
 
-export function expectUserData(pdu: Deliver | Submit, expecting: { text: string; size?: number }) {
+export function expectUserData(pdu: Deliver | Submit, expecting: { text: string; size?: number | undefined }) {
 	expect(pdu.data.getText()).toBe(expecting.text);
 
 	if (expecting.size !== undefined) {
