@@ -16,7 +16,7 @@ export class Helper {
 	static readonly limitUnicode = 70;
 
 	private static readonly TEXT_ENCODER = new TextEncoder();
-	private static readonly TEXT_DECODER = new TextDecoder();
+	// private static readonly TEXT_DECODER = new TextDecoder();
 
 	/**
 	 * Converts a hex string to a Uint8Array.

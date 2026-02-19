@@ -12,16 +12,13 @@
 			"types": "./dist/types/index.d.ts"
 		}
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/JulianWowra/node-pdu.git"
-	},
+	"repository": "https://github.com/JulianWowra/node-pdu.git",
 	"homepage": "https://github.com/JulianWowra/node-pdu",
 	"license": "MIT",
 	"author": "jackkum <jackkum@bk.ru>",
-	"publishConfig": {
-		"provenance": true
-	},
+	"contributors": [
+		"Julian Wowra <development@julianwowra.de>"
+	],
 	"packageManager": "pnpm@10.13.1",
 	"devDependencies": {
 		"@eslint/js": "^9.30.1",
